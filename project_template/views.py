@@ -16,4 +16,4 @@ def index(request):
      		#return HttpResponse('Similar Messages (top 10): \n'+output)
     else:#
         form = QueryForm()
-    	return render(request, 'project_template/index.html', {'form': form})
+        return render(request, 'project_template/index.html', {'form': form})
