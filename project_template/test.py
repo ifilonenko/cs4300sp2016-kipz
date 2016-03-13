@@ -6,7 +6,7 @@ import json
 
 def read_file(n):
 	path = Docs.objects.get(id = n).address;
-	file = open(path)
+	file = open('https://github.com/xuqiantong/CS4300/tree/master/jsons/kardashian-transcripts.json')
 	transcripts = json.load(file)
 	return transcripts
 
