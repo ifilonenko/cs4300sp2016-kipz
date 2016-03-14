@@ -19,7 +19,8 @@ e.g. $ cd ~/Document
 $ git clone https://github.com/CornellNLP/CS4300.git
 $ cd CS4300
 ```
-- Sign in to your own github account and create a new repository for this project. 
+- Sign in to your own github account and create a new repository for this project. The names of the repo's need to start with `cs4300sp2016-`.
+- Add `cristiandnm` (Prof. Cristian's account name) as a member with admin rights on the git repo. 
 - Push the framework to your own github repository.
 ```sh
 $ git remote rename origin upstream
