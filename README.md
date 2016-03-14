@@ -1,6 +1,6 @@
 #Project Framework Description
 
-This is a website framework which provides a simple UI for your information system. You can simply embed your code and ideas in it, so that they can be visited and used by others from the internet. Let others be proud of yout system just like yourself!
+This is a website framework which provides a simple UI for your information system. You can simply embed your code and ideas in it, so that they can be visited and used by others from the internet. Let others be proud of your system just like yourself!
 
 Feel free to do any changes to the framework. You can even totally discard it and establish your own website as long as it will not be a problem for you. After all, it is your own information retrieval system not the website you have to focus on. Hope you guys enjoy it. Have fun!
 
