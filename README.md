@@ -11,23 +11,33 @@ Git is a version control system designed to handle everything for your project. 
 
 Then, it’s time to start up! You have to use the terminal or the command line tools for this part.
 - Go to the folder you want to put your project. 
-($ cd ~/Document)
+```sh
+$ cd ~/Document
+```
 - Pull the source code of this framework from github to your computer.
-($ git clone https://github.com/CornellNLP/CS4300.git)
-($ cd CS4300)
+```sh
+$ git clone https://github.com/CornellNLP/CS4300.git
+$ cd CS4300
+```
 - Sign in to your own github account and create a new repository for this project. 
 - Push the framework to your own github repository.
-	($ git remote rename origin upstream)
-	($ git remote add origin URL_TO_GITHUB_REPO) 
+```sh
+$ git remote rename origin upstream
+$ git remote add origin URL_TO_GITHUB_REPO
+$ git push origin master
+```
 ← you can find this URL on you github page of the new repository
-	($ git push origin master)
 - Now, everything is on your own. You can modify the code and push them to your own remote repository. 
 Pull the code 
-($ git pull)
+```sh
+$ git pull
+```
 Push the code 
+```sh
 ($ git add -A) 
 ($ git commit -m “<message about your modification>”)
 ($ git push)
+```
 
 Learn more: 
 https://git-scm.com/doc
