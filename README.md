@@ -30,15 +30,15 @@ $ git push origin master
 - Now, everything is on your own. You can modify the code and push them to your own remote repository. 
 
 	- Pull the code 
-```sh
-$ git pull
-```
+	```sh
+	$ git pull
+	```
 	- Push the code 
-```sh
-($ git add -A) 
-($ git commit -m “<message about your modification>”)
-($ git push)
-```
+	```sh
+	($ git add -A) 
+	($ git commit -m “<message about your modification>”)
+	($ git push)
+	```
 
 Learn more: 
 https://git-scm.com/doc
