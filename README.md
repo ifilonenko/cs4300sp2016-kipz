@@ -36,7 +36,7 @@ You can find this URL_TO_GITHUB_REPO on the github page of your new repository.
 	- Push the code 
 	```sh
 	$ git add -A
-	$ git commit -m “<message about your modification>"
+	$ git commit -m "<message about your modification>"
 	$ git push
 	```
 
@@ -96,7 +96,7 @@ $ git push heroku master
 ```sh
 $ heroku ps:scale web=1
 ```
-- Now, you can visit your website at <your_website_name>.herokuapp.com/pt/.
+- Now, you can visit your website at `<your_website_name>.herokuapp.com/pt/`.
 
 Learn more:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
