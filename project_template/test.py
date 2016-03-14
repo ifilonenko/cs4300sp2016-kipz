@@ -5,12 +5,8 @@ import json
 
 
 def read_file(n):
-	path = Docs.objects.get(id = n).address; 
-	# path = 'jsons/kardashian-transcripts.json'
-	# I save all the paths of the file I will use in the database
-	# But you do not have to do the same 
-	
-	file = open('jsons/kardashian-transcripts.json')
+	path = Docs.objects.get(id = n).address;
+	file = open(path)
 	transcripts = json.load(file)
 	return transcripts
 
