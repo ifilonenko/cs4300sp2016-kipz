@@ -12,7 +12,7 @@ Git is a version control system designed to handle everything for your project. 
 Then, it’s time to start up! You have to use the terminal or the command line tools for this part.
 - Go to the folder you want to put your project. 
 ```sh
-$ cd ~/Document
+e.g. $ cd ~/Document  
 ```
 - Pull the source code of this framework from github to your computer.
 ```sh
@@ -28,11 +28,12 @@ $ git push origin master
 ```
 ← you can find this URL on you github page of the new repository
 - Now, everything is on your own. You can modify the code and push them to your own remote repository. 
-Pull the code 
+
+	- Pull the code 
 ```sh
 $ git pull
 ```
-Push the code 
+	- Push the code 
 ```sh
 ($ git add -A) 
 ($ git commit -m “<message about your modification>”)
