@@ -26,7 +26,7 @@ $ git remote rename origin upstream
 $ git remote add origin URL_TO_GITHUB_REPO
 $ git push origin master
 ```
-← you can find this URL on you github page of the new repository
+You can find this URL_TO_GITHUB_REPO on the github page of your new repository.
 - Now, everything is on your own. You can modify the code and push them to your own remote repository. 
 
 	- Pull the code 
@@ -50,12 +50,16 @@ Good News! In this project, you do not have to use the database at all, which co
 
 You may want to run this website on your own computer everytime you make some progress, before depolying it on the remote server. You still have to use terminals to do this.
 - First, you have to install django
-	($ pip install django)
+```sh
+$ pip install django
+```
 - Go to the project folder and start the web server server
-	($ cd ~/Documents/CS4300)
-	($ python manage.py runserver)
+```sh
+$ cd ~/Documents/CS4300
+$ python manage.py runserver
+```
   At this moment, if the server is runing successfully, you should see something in your terminal like this:
-(
+```
 Performing system checks...
 
 System check identified no issues (0 silenced).
@@ -63,7 +67,7 @@ March 13, 2016 - 03:50:58
 Django version 1.9.4, using settings 'mysite.settings'
 Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
-)
+```
 - Open your browser and you can have a look at your website at http://127.0.0.1:8000/pt
 - Now, the website is running on your local machine. Everytime you change something, just simply refresh the page to check whether it works or not. Enjoy!
 
@@ -76,14 +80,22 @@ Heroku is a platform as a service (PaaS) that enables developers to build and ru
 - First, install heroku toolbelt from https://toolbelt.heroku.com/
 - Create a heroku account.
 - Login on your local machine
-	($ heroku login)
+```sh
+$ heroku login
+```
 - Go to the project folder and revise the requirements.txt file if you use any new packages in your python code
 - Create an app on heroku.
-	($ heroku create <your_website_name>)
+```sh
+$ heroku create <your_website_name>
+```
 - Push the project on heroku.
-	($ git push heroku master)
+```
+$ git push heroku master
+```
 - The application is now deployed. Ensure that at least one instance of the app is running.
-	($ heroku ps:scale web=1)
+```sh
+$ heroku ps:scale web=1
+```
 - Now, you can visit your website at <your_website_name>.herokuapp.com/pt/.
 
 Learn more:
