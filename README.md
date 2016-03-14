@@ -96,7 +96,7 @@ $ git push heroku master
 ```sh
 $ heroku ps:scale web=1
 ```
-- Now, you can visit your website at `<your_website_name>.herokuapp.com/pt/`.
+- Now, you can visit your website at https://<your_website_name>.herokuapp.com/pt/.
 
 Learn more:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
