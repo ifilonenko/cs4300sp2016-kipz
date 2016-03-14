@@ -27,7 +27,7 @@ $ git remote rename origin upstream
 $ git remote add origin URL_TO_GITHUB_REPO
 $ git push origin master
 ```
-You can find this URL_TO_GITHUB_REPO on the github page of your new repository.
+You can find this `URL_TO_GITHUB_REPO` on the github page of your new repository.
 - Now, everything is on your own. You can modify the code and push them to your own remote repository. 
 
 	- Pull the code 
