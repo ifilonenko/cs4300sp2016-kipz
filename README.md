@@ -2,6 +2,8 @@
 
 This is a website framework which provides a simple UI for your information system. You can simply embed your code and ideas in it, so that they can be visited and used by others from the internet. Let others be proud of your system just like yourself!
 
+Check out the sample that we came up with: https://cs4300.herokuapp.com/pt/
+
 Feel free to make any changes to the framework. You can even totally discard it and establish your own website as long as it will not be a problem for you. Please include your project name and student names in your index.html file. In the template we provided, a TODO is indicated for you to put in your names. After all, it is your own information retrieval system not the website you have to focus on. Hope you guys enjoy it. Have fun!
 
 Below are several useful tools and important components of the framework. 
