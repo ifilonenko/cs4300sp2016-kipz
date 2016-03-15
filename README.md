@@ -56,6 +56,11 @@ You may want to run this website on your own computer everytime you make some pr
 ```sh
 $ pip install django
 ```
+- In order to see the CSS styling and pagination of results, make sure to install `whitenoise` and `django-bootstrap-pagination`
+```sh
+$ pip install whitenoise
+$ pip install django-bootstrap-pagination
+```
 - Go to the project folder and start the web server
 ```sh
 $ cd ~/Documents/CS4300
@@ -72,11 +77,6 @@ Starting development server at http://127.0.0.1:8000/
 Quit the server with CONTROL-C.
 ```
 - Open your browser and you can have a look at your website at http://127.0.0.1:8000/pt
-- If you don't see the CSS styling and pagination of results, make sure to install `whitenoise` and `django-bootstrap-pagination`
-```sh
-$ pip install whitenoise
-$ pip install django-bootstrap-pagination
-```
 - Now, the website is running on your local machine. Everytime you make some change, just simply refresh the page to check whether it works or not. Enjoy!
 
 Learn more:
