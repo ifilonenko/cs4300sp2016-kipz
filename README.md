@@ -21,7 +21,7 @@ e.g. $ cd ~/Document
 $ git clone https://github.com/CornellNLP/CS4300.git
 $ cd CS4300
 ```
-- Sign in to your own github account and create a new repository for this project. The names of the repo's need to start with `cs4300sp2016-`.
+- Sign in to your own github account and create a new repository for this project. The name of the repo's need to start with `cs4300sp2016-`.
 - Add `cristiandnm` (Prof. Cristian's account name) as a member with admin rights on the git repo. 
 - Push the framework to your own github repository.
 ```sh
@@ -56,12 +56,12 @@ You may want to run this website on your own computer everytime you make some pr
 ```sh
 $ pip install django
 ```
-- Go to the project folder and start the web server server
+- Go to the project folder and start the web server
 ```sh
 $ cd ~/Documents/CS4300
 $ python manage.py runserver
 ```
-  At this moment, if the server is runing successfully, you should see something in your terminal like this:
+  At this moment, if the server is running successfully, you should see something in your terminal like this:
 ```
 Performing system checks...
 
@@ -77,7 +77,7 @@ Quit the server with CONTROL-C.
 $ pip install whitenoise
 $ pip install django-bootstrap-pagination
 ```
-- Now, the website is running on your local machine. Everytime you change something, just simply refresh the page to check whether it works or not. Enjoy!
+- Now, the website is running on your local machine. Everytime you make some change, just simply refresh the page to check whether it works or not. Enjoy!
 
 Learn more:
 https://docs.djangoproject.com/en/1.9/
