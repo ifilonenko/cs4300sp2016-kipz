@@ -110,9 +110,13 @@ Learn more:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
 
 ## About this framework
-Have a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query according to their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure you import all the library or modules you need for each python file you create. For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku.
+Have a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
 
-??  About where to put the file 
+For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku.
+
+//////
+[??  About where to put the file ??]
 However, it is not wise to do so when your input data is very large. (Really?) You can put those file on somewhere else (e.g. github) and change the read_file function accordingly. 
+///////
 
 Then have a look at the `project_template/views.py`. You will find out how your code and functions interact with the webpages. When django get a valid query, it will call the `find_similar` function in `project_template/test.py` and render another webpage to show the results.
