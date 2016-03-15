@@ -4,7 +4,7 @@ This is a website framework which provides a simple UI for your information syst
 
 Check out the sample that we came up with: https://cs4300.herokuapp.com/pt/
 
-Feel free to make any changes to the framework. You can even totally discard it and establish your own website as long as it will not be a problem for you. Please include your project name and student names in your index.html file. In the template we provided, a TODO is indicated for you to put in your names. After all, it is your own information retrieval system not the website you have to focus on. Hope you guys enjoy it. Have fun!
+Feel free to make any changes to the framework. You can even totally discard it and establish your own website as long as it will not be a problem for you. Please include your project name and student names in your `project_template/templates/project_template/index.html` file. In the template we provided, a TODO is indicated for you to put in your names. After all, it is your own information retrieval system not the website you have to focus on. Hope you guys enjoy it. Have fun!
 
 Below are several useful tools and important components of the framework. 
 
@@ -110,7 +110,7 @@ Learn more:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
 
 ## About this framework
-Have a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
+Take a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
 
 For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku.
 
@@ -119,4 +119,9 @@ For the input data, I just simply use the JSON file `jsons/kardashian-transcript
 However, it is not wise to do so when your input data is very large. (Really?) You can put those file on somewhere else (e.g. github) and change the read_file function accordingly. 
 ///////
 
-Then have a look at the `project_template/views.py`. You will find out how your code and functions interact with the webpages. When django get a valid query, it will call the `find_similar` function in `project_template/test.py` and render another webpage to show the results.
+Then take a look at the `project_template/views.py`. You will find out how your code and functions interact with the index page  `project_template/templates/project_template/index.html`. When django get a valid query, it will call the `find_similar` function in `project_template/test.py` and render to show the results at the bottom of the index page. Pagination function also lives in `project_template/views.py` and the output is paginated on `project_template/templates/project_template/index.html`.
+
+To change styling of the app, modify or add stylings in the `mysite/static` folder. You can experiment with Javascript and JQuery too!
+
+Learn more:
+https://devcenter.heroku.com/articles/django-assets
