@@ -1,12 +1,16 @@
-<!DOCTYPE html>
 <html>
     <head>
-        <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
     </head>
     
     <body>
+        <!-- TODO: Please change lines 10 and 11 according to your actual project name and student names-->
+        <div class="topcorner">
+            <p>Project Name</p>
+            <p>Student Name (NetID)</p>
+        </div>
+        
         <form class="form-inline global-search" method='GET'>
             <h1 style="font-size: 55px; font-family:Futura; color: #4285F4">
                 C
@@ -21,10 +25,6 @@
             
             <div class="form-group">
                 <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
-                <!-- OLD IMPLEMENTATION=======================================================
-                {% csrf_token %}
-                {{ form }}
-                ============================================================================-->
             </div>
             <button type="submit" class="btn btn-info"> Go! </button>
         </form>
@@ -37,18 +37,18 @@
             
             <div class="pagination">
                 <span class="step-links">
-                {% if output.has_previous %}
-                <a href= "{{magic_url}}&page={{ output.previous_page_number }}">previous</a>
-                {% endif %}
-                
-                <!-- Showing the page numbers in Html Page -->
-                <span class="current">
-                Page _{{ output.number }}_ of _{{ output.paginator.num_pages }}_
-                </span>
-                
-                {% if output.has_next %}
-                <a href= "{{magic_url}}&page={{ output.next_page_number }}">next</a>
-                {% endif %}
+                    {% if output.has_previous %}
+                    <a href= "{{magic_url}}&page={{ output.previous_page_number }}">previous</a>
+                    {% endif %}
+                    
+                    <!-- Showing the page numbers in Html Page -->
+                    <span class="current">
+                    Page _{{ output.number }}_ of _{{ output.paginator.num_pages }}_
+                    </span>
+                    
+                    {% if output.has_next %}
+                    <a href= "{{magic_url}}&page={{ output.next_page_number }}">next</a>
+                    {% endif %}
                 </span>
             </div>
         </div>
