@@ -115,6 +115,7 @@ https://devcenter.heroku.com/articles/getting-started-with-python#introduction
 	- `upstream`, the shared repo for the project template
 	- `origin`, your own remote repo on github
 	- `heroku`, the repo you deploy on the heroku
+  
   You can check it with this command
 ```sh
 $ git remote -v
@@ -125,12 +126,7 @@ $ git remote -v
 ## About this framework
 Take a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
 
-For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku.
-
-//////
-[??  About where to put the file ??]
-However, it is not wise to do so when your input data is very large. (Really?) You can put those file on somewhere else (e.g. github) and change the read_file function accordingly. 
-///////
+For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku. You can put your input data at any place on the internet as long as your web app can get access to the data and the reading process will not hurt its efficiency.
 
 Then take a look at the `project_template/views.py`. You will find out how your code and functions interact with the index page  `project_template/templates/project_template/index.html`. When django get a valid query, it will call the `find_similar` function in `project_template/test.py` and render to show the results at the bottom of the index page. Pagination function also lives in `project_template/views.py` and the output is paginated on `project_template/templates/project_template/index.html`.
 
