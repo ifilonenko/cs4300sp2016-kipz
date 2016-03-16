@@ -110,6 +110,18 @@ $ heroku ps:scale web=1
 Learn more:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
 
+## About this framework
+Take a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
+
+For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku. You can put your input data at any place on the internet as long as your web app can get access to the data and the reading process will not hurt its efficiency.
+
+Then take a look at the `project_template/views.py`. You will find out how your code and functions interact with the index page  `project_template/templates/project_template/index.html`. When django get a valid query, it will call the `find_similar` function in `project_template/test.py` and render to show the results at the bottom of the index page. Pagination function also lives in `project_template/views.py` and the output is paginated on `project_template/templates/project_template/index.html`.
+
+To change styling of the app, modify or add stylings in the `mysite/static` folder. You can experiment with Javascript and JQuery too!
+
+Learn more:
+https://devcenter.heroku.com/articles/django-assets
+
 ## Small Tips
 - When you get `Permission Denied`, try to add `sudo` before your last shell command.
 - You should have three remote git repositories: 
@@ -123,15 +135,3 @@ $ git remote -v
 ```
 - When you meet some problems with heroku deployment, it should be really helpful to read the build logs.
 - The Git repo should be no larger than 1GB. Have a look at this page https://devcenter.heroku.com/articles/limits for more the limits of heroku. 
-
-## About this framework
-Take a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
-
-For the input data, I just simply use the JSON file `jsons/kardashian-transcripts.json` and I push it together with the whole project to the heroku. You can put your input data at any place on the internet as long as your web app can get access to the data and the reading process will not hurt its efficiency.
-
-Then take a look at the `project_template/views.py`. You will find out how your code and functions interact with the index page  `project_template/templates/project_template/index.html`. When django get a valid query, it will call the `find_similar` function in `project_template/test.py` and render to show the results at the bottom of the index page. Pagination function also lives in `project_template/views.py` and the output is paginated on `project_template/templates/project_template/index.html`.
-
-To change styling of the app, modify or add stylings in the `mysite/static` folder. You can experiment with Javascript and JQuery too!
-
-Learn more:
-https://devcenter.heroku.com/articles/django-assets
