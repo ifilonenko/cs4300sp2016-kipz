@@ -134,4 +134,4 @@ https://devcenter.heroku.com/articles/django-assets
 $ git remote -v
 ```
 - When you meet some problems with heroku deployment, it should be really helpful to read the build logs.
-- The Git repo should be no larger than 1GB. Have a look at this page https://devcenter.heroku.com/articles/limits for more the limits of heroku. 
+- The Git repo should be no larger than 1GB. Have a look at this page https://devcenter.heroku.com/articles/limits for more information about the limits of heroku. 
