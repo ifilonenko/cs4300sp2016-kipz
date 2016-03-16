@@ -104,10 +104,23 @@ $ git push heroku master
 ```sh
 $ heroku ps:scale web=1
 ```
-- Now, you can visit your website at `https://<your_website_name>.herokuapp.com/pt/`.
+- Now, you can visit your website at `https://<your_website_name>.herokuapp.com/pt/`. Sometimes, it may take a while to get response from heroku server, just be patient!
 
 Learn more:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
+
+## Small Tips
+- When you get `Permission Denied`, try to add `sudo` before your last shell command.
+- You should have three remote git repositories: 
+	- `upstream`, the shared repo for the project template
+	- `origin`, your own remote repo on github
+	- `heroku`, the repo you deploy on the heroku
+  You can check it with this command
+```sh
+$ git remote -v
+```
+- When you meet some problems with heroku deployment, it should be really helpful to read the build logs.
+- The Git repo should be no larger than 1GB. Have a look at this page https://devcenter.heroku.com/articles/limits for more the limits of heroku. 
 
 ## About this framework
 Take a look at the `project_template/test.py` file which implement the function that searching for the most similar messages to the query based on their edit difference. You can implement your system accoring to this sample code. Note that you have to make sure that you have imported all the libraries or modules you need for each python file you createed. 
