@@ -46,10 +46,10 @@ $ git push origin master
 	$ git commit -m "<message about your modification>"
 	$ git push
 	```
-- If you are unable to successfully push/pull, set the default behavior by doing:
-```
-$ git config branch.master.remote <YOUR-REPO-NAME>
-```
+	- If you are unable to successfully push/pull, set the default behavior by doing:
+	```
+	$ git config branch.master.remote <YOUR-REPO-NAME>
+	```
 
 Learn more: 
 https://git-scm.com/doc
