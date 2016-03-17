@@ -12,9 +12,11 @@ Below are several useful tools and important components of the framework.
 Git is a version control system designed to handle everything for your project. GitHub is a web-based Git repository hosting service where you can share your codes and ideas with your teammate and collaborate with each other. If you have never used that before, you can download Git from https://git-scm.com/downloads. 
 
 Then, it’s time to start up! You have to use the terminal or the command line tools for this part.
-- Go to the folder you want to put your project. 
+NOTE: If you are using Windows, please read the `If you are using Windows` section at the end of this document before starting the tutorial.
+
+- Go to the folder you want to put your project. Remain in this directory for all future commands in the tutorial.
 ```sh
-e.g. $ cd ~/Document  
+(e.g.) $ cd ~/Document  
 ```
 - Pull the source code of this framework from github to your computer.
 ```sh
@@ -29,8 +31,9 @@ $ git remote rename origin upstream
 $ git remote add origin URL_TO_GITHUB_REPO
 $ git push origin master
 ```
-  You can find this `URL_TO_GITHUB_REPO` on the github page of your new repository.
-- Now, everything is on your own. You can modify the code and push them to your own remote repository. 
+  You can find this `URL_TO_GITHUB_REPO` on the home page of your new repository, which will be of the form `https://github.com/<Username>/<Repo-Name>.git` (ex: https://github.com/CornellNLP/CS4300.git). The URL you want is in the text box near the `Download ZIP` button on your repo’s homepage.
+
+- Now, everything is on your local machine. You can modify the code and push them to your own remote repository. 
 
 	- Pull the code 
 	```sh
@@ -42,6 +45,10 @@ $ git push origin master
 	$ git commit -m "<message about your modification>"
 	$ git push
 	```
+- If you are unable to successfully push/pull, set the default behavior by doing:
+```
+$ git config branch.master.remote <YOUR-REPO-NAME>
+```
 
 Learn more: 
 https://git-scm.com/doc
@@ -135,3 +142,14 @@ $ git remote -v
 ```
 - When you meet some problems with heroku deployment, it should be really helpful to read the build logs.
 - The Git repo should be no larger than 300MB. Have a look at this page https://devcenter.heroku.com/articles/limits for more information about the limits of heroku. 
+
+## If you are using Windows
+- In order to run the shell commands throughout this tutorial that involve Git and Heroku, you will need to use a shell that recognizes Git. On Windows with Git installed, you should be able to find a program called “Git Shell” by searching your applications. Open this and use it for running all commands throughout the tutorial in the “Git & Github” and “Heroku” sections.
+
+Note: Some students may already have configured their Windows Powershell or Command Prompt (CMD) to accept Git commands, but this is not the default setting.
+
+- You need to have the python-Levenshtein package already installed before starting the tutorial. You should have installed this from doing A2, but if you do not, then you will need a Python 2.7 environment active to install the package. Once you’ve activated the Python 2.7 environment, you should simply be able to do “pip install python-Levenshtein”.
+
+Note that if you normally work in a Python 3 environment, then you will need to use CMD to switch to your Python 2.7 environment (Powershell or Git Shell will not work). If you are unable to do this or the tutorial is not working for you due to python-Levenshtein, post on Piazza and we will post the zip of the package to put directly into your Python installation directory.
+
+- In general, if you are having any other issues with running commands in the “Django” section of the tutorial, try opening a CMD prompt instance (separate from the Git Shell/Powershell you are using for the other sections), navigate to the project directory, and run those commands in CMD.
