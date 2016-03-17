@@ -15,11 +15,11 @@ Then, it’s time to start up! You have to use the terminal or the command line 
 
 NOTE: If you are using Windows, please read the `If you are using Windows` section at the end of this document before starting the tutorial.
 
-- Go to the folder you want to put your project. Remain in this directory for all future commands in the tutorial.
+- Go to the folder you want to put your project.
 ```sh
 (e.g.) $ cd ~/Document  
 ```
-- Pull the source code of this framework from github to your computer.
+- Pull the source code of this framework from github to your local machine. Remain in this project directory for all future commands in the tutorial.
 ```sh
 $ git clone https://github.com/CornellNLP/CS4300.git
 $ cd CS4300
