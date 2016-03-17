@@ -146,10 +146,10 @@ $ git remote -v
 ## If you are using Windows
 - In order to run the shell commands throughout this tutorial that involve Git and Heroku, you will need to use a shell that recognizes Git. On Windows with Git installed, you should be able to find a program called “Git Shell” by searching your applications. Open this and use it for running all commands throughout the tutorial in the “Git & Github” and “Heroku” sections.
 
-Note: Some students may already have configured their Windows Powershell or Command Prompt (CMD) to accept Git commands, but this is not the default setting.
+- If you already have configured their Windows Powershell or Command Prompt (CMD) to accept Git commands, but this is not the default setting.
 
 - You need to have the python-Levenshtein package already installed before starting the tutorial. You should have installed this from doing A2, but if you do not, then you will need a Python 2.7 environment active to install the package. Once you’ve activated the Python 2.7 environment, you should simply be able to do “pip install python-Levenshtein”.
 
-Note that if you normally work in a Python 3 environment, then you will need to use CMD to switch to your Python 2.7 environment (Powershell or Git Shell will not work). If you are unable to do this or the tutorial is not working for you due to python-Levenshtein, post on Piazza and we will post the zip of the package to put directly into your Python installation directory.
+- If you normally work in a Python 3 environment, then you will need to use CMD to switch to your Python 2.7 environment (Powershell or Git Shell will not work). If you are unable to do this or the tutorial is not working for you due to python-Levenshtein, post on Piazza and we will post the zip of the package to put directly into your Python installation directory.
 
 - In general, if you are having any other issues with running commands in the “Django” section of the tutorial, try opening a CMD prompt instance (separate from the Git Shell/Powershell you are using for the other sections), navigate to the project directory, and run those commands in CMD.
