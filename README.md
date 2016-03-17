@@ -12,6 +12,7 @@ Below are several useful tools and important components of the framework.
 Git is a version control system designed to handle everything for your project. GitHub is a web-based Git repository hosting service where you can share your codes and ideas with your teammate and collaborate with each other. If you have never used that before, you can download Git from https://git-scm.com/downloads. 
 
 Then, it’s time to start up! You have to use the terminal or the command line tools for this part.
+
 NOTE: If you are using Windows, please read the `If you are using Windows` section at the end of this document before starting the tutorial.
 
 - Go to the folder you want to put your project. Remain in this directory for all future commands in the tutorial.
