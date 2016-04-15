@@ -7,7 +7,6 @@ import numpy as np
 from collections import defaultdict
 from collections import Counter
 from numpy import linalg as LA
-import matplotlib.pyplot as plt
 
 
 ### READ PRECOMPUTED VALUES
