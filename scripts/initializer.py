@@ -4,8 +4,30 @@ import numpy as np
 from collections import defaultdict
 from collections import Counter
 from numpy import linalg as LA
+import base64
 import json
 import matplotlib.pyplot as plt
+
+class NumpyEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        """If input object is an ndarray it will be converted into a dict 
+        holding dtype, shape and the data, base64 encoded.
+        """
+        if isinstance(obj, np.ndarray):
+            if obj.flags['C_CONTIGUOUS']:
+                obj_data = obj.data
+            else:
+                cont_obj = np.ascontiguousarray(obj)
+                assert(cont_obj.flags['C_CONTIGUOUS'])
+                obj_data = cont_obj.data
+            data_b64 = base64.b64encode(obj_data)
+            return dict(__ndarray__=data_b64,
+                        dtype=str(obj.dtype),
+                        shape=obj.shape)
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder(self, obj)
+
 
 def get_sim(beer1, beer2):
     """
@@ -20,48 +42,6 @@ def get_sim(beer1, beer2):
     doc_of_beer_2 = doc_voc_matrix[beer_name_to_index[beer2]]   
     numerator = np.dot(doc_of_beer_1,doc_of_beer_2)
     return numerator/(LA.norm(doc_of_beer_1)* LA.norm(doc_of_beer_2))
-
-def top_terms(n1, n2, k=10):
-    """
-    Arguments:
-        n1: The name of the beer we are looking for.
-        n2: The title of the second beer we are looking for.
-        k: Number of top terms to return
-    
-    Returns:
-        result: List of the top k similar terms between the
-        two beer review(s).
-    """
-    beer1 = doc_voc_matrix[beer_name_to_index[n1]]
-    beer2 = doc_voc_matrix[beer_name_to_index[n2]]
-    return [ index_to_vocab[key] for key in np.multiply(beer1,beer2).argsort()[-k:][::-1] ]
-
-def top_similar(beer, k=10):
-    """
-        Arguments:
-        beer: The name of the beer we are looking for.
-        k: Number of top terms to return
-    
-    Returns:
-        result: List of the top k similar beers 
-
-    """
-    beer_index = beer_name_to_index[beer]
-    filtered_s =  beer_sims[beer_index].argsort()[-(k+1):][::-1]
-    result = []
-    for elem in filtered_s:
-        if elem != beer_index:
-            result.append((beer_index_to_name[elem],get_sim(beer, beer_index_to_name[elem])))
-    return result
-
-def least_similar(beer, k=10):
-    beer_index = beer_name_to_index[beer]
-    filtered_s =  beer_sims[beer_index].argsort()[:(k+1)]
-    result = []
-    for elem in filtered_s:
-        if elem != beer_index:
-            result.append((beer_index_to_name[elem],get_sim(beer, beer_index_to_name[elem])))
-    return result
 
 file = open("beer_10000.json")
 transcripts = json.load(file)
@@ -92,10 +72,14 @@ for beer1 in range(beer_sims.shape[0]):
     for beer2 in range(beer_sims.shape[1]):
         beer_sims[beer1,beer2] = (get_sim(beer_index_to_name[beer1], beer_index_to_name[beer2]))
 print("--------------")
-np.save('beer_sims.npy', beer_sims)
+json.dump(beer_sims, open('beer_sims.json', 'w'), cls=NumpyEncoder)
+print("HERE")
 json.dump(beer_name_to_index, open('beer_name_to_index.json', 'w'))
+print("NOW HERE")
 json.dump(beer_index_to_name, open('beer_index_to_name.json', 'w'))
-np.save('doc_voc_matrix.npy', doc_voc_matrix)
+print("NOW HERE HERE")
+json.dump(doc_voc_matrix, open('doc_voc_matrix.json', 'w'), cls=NumpyEncoder)
+print("NOW HERE HERE HERE")
 
-print(top_similar('Red Moon'))
+
 

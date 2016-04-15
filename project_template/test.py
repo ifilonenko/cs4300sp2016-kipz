@@ -9,6 +9,8 @@ import numpy as np
 from collections import defaultdict
 from collections import Counter
 from numpy import linalg as LA
+from scipy.sparse.linalg import svds
+from sklearn.preprocessing import normalize
 
 def json_numpy_obj_hook(dct):
     """Decodes a previously encoded numpy ndarray with proper shape and dtype.
@@ -26,10 +28,14 @@ file1 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_i
 beer_name_to_index = json.load(file1)
 file2 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_index_to_name.json')
 beer_index_to_name = json.load(file2)
-file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sims.json')
-beer_sims = json.load(file3, object_hook=json_numpy_obj_hook)
-file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/doc_voc_matrix.json')
-doc_voc_matrix = json.load(file4, object_hook=json_numpy_obj_hook)
+# file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sims.json')
+# beer_sims = json.load(file3, object_hook=json_numpy_obj_hook)
+# file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/doc_voc_matrix.json')
+# doc_voc_matrix = json.load(file4, object_hook=json_numpy_obj_hook)
+file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compressed.json')
+beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook)
+file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
+features_compressed = json.load(file4, object_hook=json_numpy_obj_hook)
 
 def get_sim(beer1, beer2):
     """
@@ -131,6 +137,15 @@ def roccio_with_pseudo(q, k = 10):
             cos_indexes.append(elem)
     return ([beer_index_to_name[x] for x in cos_indexes][:k])
 
+def closest_projects(beers_set, project_index_in, k = 5):
+    beers_compressed = normalize(beers_set, axis = 1)
+    sims = beers_compressed.dot(beers_compressed[project_index_in,:])
+    asort = np.argsort(-sims)[:k+1]
+    result = []
+    for i in asort[1:]:
+        result.append((beer_index_to_name[i],sims[i]/sims[asort[0]]))
+    return result
+
 def find_similar(q):
 	print("Searching %d beers" % len(beer_index_to_name))
-	return top_similar(q,50)
+	return closest_projects(beers_compressed, beer_name_to_index[q], 50)
