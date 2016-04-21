@@ -1,7 +1,11 @@
 <html>
     <head>
+        {% load staticfiles %}
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
+        <script type='text/javascript' src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
+        <script type='text/javascript' src="{% static 'js/typeahead.bundle.min.js' %}"></script>
+        <script type='text/javascript' src="{% static 'js/jquery.js' %}"></script>
     </head>
     
     <body>
@@ -26,13 +30,13 @@
             
             <br><br>
             
-            <div class="form-group">
-                <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
+            <div id="the-basics" class="form-group">
+                <input id="input" type="text" name="search" class="typeahead form-control" placeholder="Your Input">
             </div>
             <button type="submit" class="btn btn-info"> Go! </button>
         </form>
         
-        <div class="form-inline global-search">
+        <div class="output form-inline global-search">
             <h4>Output</h4><br>
             {% for line in output %}
                 {{line}}<br>
