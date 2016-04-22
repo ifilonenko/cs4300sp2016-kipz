@@ -61,7 +61,7 @@ def closest_features(features_set, feature_index_in, k = 5):
     for i in asort[1:]:
         result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
     return result
-    
+
 def rocchio(q, relevant, irrelevant, a=.3, b=.3, c=.8, clip = True):
     '''
     Arguments:
@@ -124,9 +124,11 @@ def roccio_with_pseudo(q, k = 10):
     return result
 
 def find_similar(q):
-    print("Searching %d beers" % len(beer_index_to_name))
+    if q not in beer_index_to_name:
+        return ["We don't have this beer"]
     return roccio_with_pseudo(q, 50)
 
 def find_similar_features(q):
-    print("Searching %d features" % len(vocab_to_index))
+    if q not in vocab_to_index.keys():
+        return ["We don't have this feature"]
     return closest_features(features_compressed, vocab_to_index[q], 50)
