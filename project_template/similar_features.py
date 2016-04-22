@@ -21,7 +21,7 @@ features_compressed = json.load(features_file, object_hook=json_numpy_obj_hook)
 
 #Using beer_1000 because my computer cant handle any of the bigger files
 #NEEDS TO BE CHANGED!!
-file1000 = open("beer_1000.json")
+file1000 = open("json/beer_1000.json")
 beers = json.load(file1000)
 data = defaultdict(str)
 for key in beers.keys():
@@ -35,6 +35,7 @@ tfidf_vec = TfidfVectorizer(input='context',stop_words='english', max_df=0.8,
 doc_voc_matrix = tfidf_vec.fit_transform(tfidf_vec_beers).toarray()
 
 index_to_vocab = {i:v for i, v in enumerate(tfidf_vec.get_feature_names())}
+print(index_to_vocab[0:5])
 vocab_to_index = {v:i for i, v in enumerate(tfidf_vec.get_feature_names())}
 
 def get_feature_sim(feature1, feature2):

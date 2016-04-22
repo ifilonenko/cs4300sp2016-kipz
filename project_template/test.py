@@ -36,7 +36,10 @@ file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compress
 beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook)
 file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
 features_compressed = json.load(file4, object_hook=json_numpy_obj_hook)
-
+file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab.json')
+index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook)
+file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
+vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook)
 def get_sim(beer1, beer2):
     """
     Arguments:
@@ -149,3 +152,16 @@ def closest_projects(beers_set, project_index_in, k = 5):
 def find_similar(q):
 	print("Searching %d beers" % len(beer_index_to_name))
 	return closest_projects(beers_compressed, beer_name_to_index[q], 50)
+
+def closest_features(features_set, feature_index_in, k = 5):
+    features_compressed = normalize(features_set.T, axis = 1)
+    sims = features_compressed.dot(features_compressed[feature_index_in,:])
+    asort = np.argsort(-sims)[:k+1]
+    result = []
+    for i in asort[1:]:
+        result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
+    return result
+
+def find_similar_features(q):
+    print("Searching %d features" % len(index_to_vocab))
+    return closest_features(features_compressed, vocab_to_index[q], 50)
