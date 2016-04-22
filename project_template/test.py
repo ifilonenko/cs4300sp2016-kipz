@@ -59,6 +59,8 @@ def closest_features(features_set, feature_index_in, k = 5):
     asort = np.argsort(-sims)[:k+1]
     result = []
     for i in asort[1:]:
+        if i == feature_index_in:
+            continue
         result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
     return result
 
@@ -120,6 +122,8 @@ def roccio_with_pseudo(q, k = 10):
     asort = np.argsort(-sims)[:k+1]
     result = []
     for i in asort[1:]:
+        if beer_index_to_name[i] == q:
+            continue
         result.append((beer_index_to_name[i],sims[i]/sims[asort[0]]))
     return result
 
