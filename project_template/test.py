@@ -42,6 +42,10 @@ file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab
 index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf8')
 file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
 vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf8')
+file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths.json')
+review_lengths = json.load(file7, object_hook=json_numpy_obj_hook)
+file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
+inv_index = json.load(file8, object_hook=json_numpy_obj_hook)
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
@@ -129,6 +133,68 @@ def roccio_with_pseudo(q, k = 10):
         result.append((beer_index_to_name[i],sims[i]/sims[asort[0]]))
     return result
 
+def merge_postings(postings1,postings2):
+    """Returns the intersection of postings1 and postings2 with the total count.
+
+    """
+    merged_posting = []
+    i,j = 0,0
+    while i < len(postings1) and j < len(postings2):
+        if postings1[i][0] == postings2[j][0]:
+            merged_posting.append((postings1[i][0], (postings1[i][1] + postings2[j][1])))
+            i += 1
+            j += 1
+        elif postings1[i][0] < postings2[j][0]:
+            i += 1
+        else:
+            j += 1
+    return merged_posting
+
+def beers_from_flavors(flavors, k):
+    """ Returns the top k beers with these flavors.
+    
+    flavors: a list of flavors
+    
+    Returns
+    beers: a dictionary of scores for each beer with these flavors and the flavors that beer has
+    
+    """
+    alpha = 10.0
+    postings = defaultdict(list)
+    scores = defaultdict(float)
+    beers_flavors = defaultdict(list)
+
+    for flav in flavors:
+        postings[flav] = inv_index[flav]
+        for beer_id, count in postings[flav]:
+            scores[beer_index_to_name[beer_id]] += alpha*count/review_lengths[beer_index_to_name[beer_id]]
+            beers_flavors[beer_index_to_name[beer_id]].append(flav)
+            
+    sorted_flavors = sorted(postings, key = lambda x: len(x), reverse=True)
+    
+    if len(flavors) > 1:
+        merged = merge_postings(postings[sorted_flavors[0]], postings[sorted_flavors[1]])
+        for beer_id, count in merged:
+            scores[beer_index_to_name[beer_id]] += 10.0*alpha*count/review_lengths[beer_index_to_name[beer_id]]
+        if len(sorted_flavors) > 2:
+            i = 2
+            while i < len(sorted_flavors):
+                merged = merge_postings(merged, postings[sorted_flavors[i]])
+                for beer_id, count in merged:
+                    scores[beer_index_to_name[beer_id]] += (i*10)*alpha*count/review_lengths[beer_index_to_name[beer_id]]
+                i += 1
+    
+    for beer_id, count in merged:
+            scores[beer_index_to_name[beer_id]] = scores[beer_index_to_name[beer_id]]*len(flavors)
+            
+    sorted_scores = sorted(scores.items(), key=operator.itemgetter(1), reverse=True)[:k]
+    
+    result = []
+    for beer, score in sorted_scores:
+        result.append((beer, score, beers_flavors[beer]))
+    return result
+
+
 def find_similar(q):
     queries = q.split(", ")
     query_list = defaultdict(list)
@@ -146,12 +212,10 @@ def find_similar(q):
             for indx in value:
                 for elem in roccio_with_pseudo(indx, 50):
                     result_list[elem[0].encode('utf-8')].append(elem[1]*100)
+        if key == "features":
+            (beer_name, score, beer_flavors) = beers_from_flavors(value, 50)
+            result_list[beer_name.encode('utf-8')].append(score*50)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
     print(final_result)
     return sorted(final_result.items(), key=operator.itemgetter(1), reverse=True)
-
-def find_similar_features(q):
-    if q not in vocab_to_index.keys():
-        return ["We don't have this feature"]
-    return closest_features(features_compressed, vocab_to_index[q], 50)
