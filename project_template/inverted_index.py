@@ -6,6 +6,16 @@ from collections import defaultdict
 from nltk.tokenize import TreebankWordTokenizer
 from collections import Counter
 
+def json_numpy_obj_hook(dct):
+    """Decodes a previously encoded numpy ndarray with proper shape and dtype.
+    :param dct: (dict) json encoded ndarray
+    :return: (ndarray) if input was an encoded ndarray
+    """
+    if isinstance(dct, dict) and '__ndarray__' in dct:
+        data = base64.b64decode(dct['__ndarray__'])
+        return np.frombuffer(data, dct['dtype']).reshape(dct['shape'])
+    return dct
+
 file1000 = open("beer_1000.json")
 beers = json.load(file1000)
 data = defaultdict(str)
@@ -17,6 +27,8 @@ file1 = urllib.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_in
 beer_name_to_index = json.load(file1)
 file2 = urllib.urlopen('https://s3.amazonaws.com/stantemptesting/beer_index_to_name.json')
 beer_index_to_name = json.load(file2)
+file6 = urllib.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
+vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook)
 
 def build_inverted_index(reviews):
     """ Builds an inverted index from the beer reviews.
@@ -46,7 +58,7 @@ def build_inverted_index(reviews):
         beer_id = beer_name_to_index[key]
         counts = Counter(reviews[key])
         for term in counts:
-            if term:
+            if term in vocab_to_index.keys():
                 inverted_index[term].append((beer_id, counts[term]))
     return inverted_index
 
