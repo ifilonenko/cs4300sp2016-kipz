@@ -163,7 +163,7 @@ def beers_from_flavors(flavors, k):
     postings = defaultdict(list)
     scores = defaultdict(float)
     beers_flavors = defaultdict(list)
-
+    merged = []
     for flav in flavors:
         postings[flav] = inv_index[flav]
         for beer_id, count in postings[flav]:
@@ -213,8 +213,9 @@ def find_similar(q):
                 for elem in roccio_with_pseudo(indx, 50):
                     result_list[elem[0].encode('utf-8')].append(elem[1]*100)
         if key == "features":
-            (beer_name, score, beer_flavors) = beers_from_flavors(value, 50)
-            result_list[beer_name.encode('utf-8')].append(score*50)
+            for inx in beers_from_flavors(value, 50):
+                (beer_name, score, beer_flavors) = inx
+                result_list[beer_name.encode('utf-8')].append(score*50)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
     print(final_result)
