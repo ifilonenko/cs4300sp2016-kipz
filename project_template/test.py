@@ -11,6 +11,8 @@ from collections import Counter
 from numpy import linalg as LA
 from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
+import operator
+import io
 
 def json_numpy_obj_hook(dct):
     """Decodes a previously encoded numpy ndarray with proper shape and dtype.
@@ -25,21 +27,21 @@ def json_numpy_obj_hook(dct):
 
 ### READ PRECOMPUTED VALUES
 file1 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_index.json')
-beer_name_to_index = json.load(file1)
+beer_name_to_index = json.load(file1, encoding='utf8')
 file2 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_index_to_name.json')
-beer_index_to_name = json.load(file2)
+beer_index_to_name = json.load(file2, encoding='utf8')
 # file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sims.json')
 # beer_sims = json.load(file3, object_hook=json_numpy_obj_hook)
 # file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/doc_voc_matrix.json')
 # doc_voc_matrix = json.load(file4, object_hook=json_numpy_obj_hook)
 file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compressed.json')
-beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook)
+beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook, encoding='utf8')
 file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
-features_compressed = json.load(file4, object_hook=json_numpy_obj_hook)
+features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8')
 file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab.json')
-index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook)
+index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf8')
 file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
-vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook)
+vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf8')
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
@@ -128,9 +130,26 @@ def roccio_with_pseudo(q, k = 10):
     return result
 
 def find_similar(q):
-    if q not in beer_index_to_name:
-        return ["We don't have this beer"]
-    return roccio_with_pseudo(q, 50)
+    queries = q.split(", ")
+    query_list = defaultdict(list)
+    result_list = defaultdict(list)
+    final_result = {}
+    for query in queries:
+        if query in beer_index_to_name:
+            query_list["beer"].append(query)
+        elif query in vocab_to_index.keys():
+            query_list["features"].append(query)
+        else:
+           return ["We don't have %s in our system" % query] 
+    for key,value in query_list.iteritems():
+        if key == "beer":
+            for indx in value:
+                for elem in roccio_with_pseudo(indx, 50):
+                    result_list[elem[0].encode('utf-8')].append(elem[1]*100)
+    for k,v in result_list.iteritems():
+        final_result[k] = sum(v)
+    print(final_result)
+    return sorted(final_result.items(), key=operator.itemgetter(1), reverse=True)
 
 def find_similar_features(q):
     if q not in vocab_to_index.keys():
