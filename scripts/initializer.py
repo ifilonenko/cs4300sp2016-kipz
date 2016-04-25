@@ -67,6 +67,7 @@ for key,value in data.iteritems():
 doc_voc_matrix = tfidf_vec.fit_transform(tfidf_vec_scripts).toarray()
 doc_by_vocab = doc_voc_matrix
 index_to_vocab = {i:v for i, v in enumerate(tfidf_vec.get_feature_names())}
+vocab_to_index = {v:i for i, v in enumerate(tfidf_vec.get_feature_names())}
 beer_sims = np.empty([len(data), len(data)], dtype = np.float32)
 for beer1 in range(beer_sims.shape[0]):
     for beer2 in range(beer_sims.shape[1]):

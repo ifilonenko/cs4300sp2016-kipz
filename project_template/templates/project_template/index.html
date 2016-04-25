@@ -1,7 +1,11 @@
 <html>
     <head>
+        {% load staticfiles %}
         <link rel="stylesheet" href="/static/bootstrap.min.css">
         <link rel="stylesheet" href="/static/main.css">
+        <script type='text/javascript' src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
+        <script type='text/javascript' src="{% static 'js/typeahead.bundle.min.js' %}"></script>
+        <script type='text/javascript' src="{% static 'js/jquery.js' %}"></script>
     </head>
     
     <body>
@@ -17,22 +21,26 @@
         <form class="form-inline global-search" method='GET'>
             <h1 style="font-size: 55px; font-family:Futura; color: #4285F4">
                 B
-                <font color=#EA4335>O</font>
-                <font color=#FBBC05>O</font>
-                G
+                <font color=#EA4335>E</font>
+                <font color=#FBBC05>E</font>
+                <font color=#34A853>R</font>
+                <font color=#FBBC05>G</font>
                 <font color=#34A853>L</font>
                 <font color=#EA4335>E</font>
             </h1>
             
             <br><br>
             
-            <div class="form-group">
-                <input id="input" type="text" name="search" class="form-control" placeholder="Your Input">
+            <div id="the-basics" class="form-group">
+                <input id="input" type="text" name="search" class="typeahead form-control" placeholder="Beer Name">
             </div>
-            <button type="submit" class="btn btn-info"> Go! </button>
+            <div id="the-features" class="form-group">
+                <input id="input" type="text" name="search_features" class="typeahead form-control" placeholder="Beer Feature">
+            </div>
+            <button id="search-button" type="submit" class="btn btn-info"> Go! </button>
         </form>
         
-        <div class="form-inline global-search">
+        <div class="output form-inline global-search">
             <h4>Output</h4><br>
             {% for line in output %}
                 {{line}}<br>
