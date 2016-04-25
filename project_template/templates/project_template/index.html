@@ -1,15 +1,15 @@
 <html>
     <head>
         {% load staticfiles %}
-        <link rel="stylesheet" href="/static/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/main.css">
         <script type='text/javascript' src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
+        <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         <script type='text/javascript' src="{% static 'js/typeahead.bundle.min.js' %}"></script>
         <script type='text/javascript' src="{% static 'js/jquery.js' %}"></script>
     </head>
     
     <body>
-        <!-- TODO: Please change lines 10 and 11 according to your actual project name and student names-->
         <div class="topcorner">
             <p>Beer Recommendation</p>
             <p>Ilan Filonenko: if56</p>
@@ -32,14 +32,17 @@
             <br><br>
             
             <div id="the-basics" class="form-group">
-                <input id="input" type="text" name="search" class="typeahead form-control" placeholder="Beer Name">
+                <input id="input1" type="text" name="search" class="typeahead form-control" placeholder="Beer Name">
             </div>
             <div id="the-features" class="form-group">
-                <input id="input" type="text" name="search_features" class="typeahead form-control" placeholder="Beer Feature">
+                <input id="input2" type="text" name="search_features" class="typeahead form-control" placeholder="Beer Feature">
             </div>
-            <button id="search-button" type="submit" class="btn btn-info"> Go! </button>
+            <button id="search-button" type="button" class="btn btn-info"> Go! </button>
         </form>
-        
+        <div class="container-multi" style="margin-left: 10.5em;">
+            <ul id="choices" class="choices" style="list-style: none;"> 
+            </ul>
+        </div>
         <div class="output form-inline global-search">
             <h4>Output</h4><br>
             {% for line in output %}
