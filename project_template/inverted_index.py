@@ -46,9 +46,8 @@ def build_inverted_index(reviews):
         beer_id = beer_name_to_index[key]
         counts = Counter(reviews[key])
         for term in counts:
-            stripped_term = term.strip().strip('.').lower()
-            if stripped_term:
-                inverted_index[stripped_term].append((beer_id, counts[term]))
+            if term:
+                inverted_index[term].append((beer_id, counts[term]))
     return inverted_index
 
 
@@ -56,6 +55,10 @@ tokenizer = TreebankWordTokenizer()
 reviews_tokens = defaultdict(list)
 
 for key in data.keys():
-    reviews_tokens[key] = tokenizer.tokenize(data[key].replace('/', ' '))
+    toks = tokenizer.tokenize(data[key].replace('/', ' ')) #to separate cases like spicy/citrus/sweet
+    toks_stripped = []
+    for term in toks:
+        toks_stripped.append(term.strip().strip('.').lower()) #to deal with cases like 'Light' and 'light.'
+    reviews_tokens[key] = toks_stripped
 
 inv_index = build_inverted_index(reviews_tokens)
