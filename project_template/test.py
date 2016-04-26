@@ -13,7 +13,6 @@ from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 import operator
 import io
-import yaml
 
 def json_numpy_obj_hook(dct):
     """Decodes a previously encoded numpy ndarray with proper shape and dtype.
