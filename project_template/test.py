@@ -43,9 +43,11 @@ index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf
 file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
 vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf8')
 file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths.json')
-review_lengths = json.load(file7, object_hook=json_numpy_obj_hook)
+review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8')
 file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
-inv_index = json.load(file8, object_hook=json_numpy_obj_hook)
+inv_index = json.load(file8, object_hook=json_numpy_obj_hook, encoding='utf8')
+file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
+beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook, encoding='utf8')
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
@@ -121,7 +123,7 @@ def roccio_with_pseudo(q, k = 10):
         two beer review(s).
     """
     '''
-    pseudo_relevant = closest_beers(beers_compressed,beer_name_to_index[q],10)
+    pseudo_relevant = closest_beers(beers_compressed,beer_name_to_index[q],k)
     query_vector = rocchio(q,pseudo_relevant,[])
     beers_compressed_2 = normalize(beers_compressed, axis = 1)
     sims = (np.dot(beers_compressed_2,query_vector))/(LA.norm(beers_compressed_2)* LA.norm(query_vector))
@@ -203,7 +205,7 @@ def beers_from_flavors(flavors, k):
     return result
 
 
-def find_similar(q):
+def find_similar(q, number=5):
     queries = q.split(", ")
     query_list = defaultdict(list)
     result_list = defaultdict(list)
@@ -218,13 +220,19 @@ def find_similar(q):
     for key,value in query_list.iteritems():
         if key == "beer":
             for indx in value:
-                for elem in roccio_with_pseudo(indx, 50):
+                for elem in roccio_with_pseudo(indx, number):
                     result_list[elem[0].encode('utf-8')].append(elem[1]*100)
         if key == "features":
-            for inx in beers_from_flavors(value, 50):
+            for inx in beers_from_flavors(value, number):
                 (beer_name, score, beer_flavors) = inx
                 result_list[beer_name.encode('utf-8')].append(score*50)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
-    print(final_result)
-    return sorted(final_result.items(), key=operator.itemgetter(1), reverse=True)
+    final_final_result = []
+    sorted_result = sorted(final_result.items(), key=operator.itemgetter(1), reverse=True)
+    for elem in sorted_result:
+        beer_id, score = elem
+        if beer_id in beer_data_all.keys(): ### ERROR WITH ENCODING
+            beer_data = beer_data_all[beer_id]
+            final_final_result.append([beer_id, score, beer_data])
+    return final_final_result

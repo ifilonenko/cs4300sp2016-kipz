@@ -6,6 +6,8 @@ from django.template import loader
 from .form import QueryForm
 from .test import find_similar
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import json
+
 
 # Create your views here.
 def index(request):
@@ -15,16 +17,24 @@ def index(request):
 	output = ''
 	if request.GET.get('search'):
 		search = request.GET.get('search')
-		output_list = find_similar(search)
-		paginator = Paginator(output_list, 10)
-		page = request.GET.get('page')
-		try:
-			output = paginator.page(page)
-		except PageNotAnInteger:
-			output = paginator.page(1)
-		except EmptyPage:
-			output = paginator.page(paginator.num_pages)
-	return render_to_response('project_template/index.html', 
-						  {'output': output,
-						   'magic_url': request.get_full_path(),
-						   })
+		output_list = find_similar(search, 2)
+		# paginator = Paginator(output_list, 10)
+		# page = request.GET.get('page')
+		# try:
+		# 	output = paginator.page(page)
+		# except PageNotAnInteger:
+		# 	output = paginator.page(1)
+		# except EmptyPage:
+		# 	output = paginator.page(paginator.num_pages)
+	print request.META["CONTENT_TYPE"]
+	if (request.META["CONTENT_TYPE"] == "text/plain"):
+		return render_to_response('project_template/index.html', 
+							  {'output': output_list,
+							   'magic_url': request.get_full_path(),
+							   'search_params': search
+							   })
+	elif (request.META["CONTENT_TYPE"] == "application/json"):
+		print("hello")
+		data = json.dumps(output_list)
+		return HttpResponse(data, content_type="application/json")
+
