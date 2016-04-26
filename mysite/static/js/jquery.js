@@ -31,7 +31,8 @@ $(document).ready(function() {
   },
   { 
     name: 'beers',
-    source: substringMatcher(beers)
+    source: substringMatcher(beers),
+    limit: 7
   });
   $('#the-features .typeahead').typeahead({
     hint: true,
@@ -40,7 +41,8 @@ $(document).ready(function() {
   },
   {
     name: 'features',
-    source: substringMatcher(features)
+    source: substringMatcher(features),
+    limit: 7
   });
   $("#the-basics .typeahead").blur(function(){
     var message = this.value;
