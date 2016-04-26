@@ -49,9 +49,9 @@ vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf
 file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths.json')
 review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8')
 file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
-inv_index = json.load(file8, encoding='utf8')
+inv_index = json.load(file8, object_hook=json_numpy_obj_hook)
 file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
-beer_data_all = json.load(file9, encoding='utf8')
+beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook)
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
