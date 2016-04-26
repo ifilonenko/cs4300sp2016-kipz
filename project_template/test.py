@@ -1,5 +1,4 @@
 from __future__ import print_function
-from .models import Docs
 import os
 import base64
 import json
@@ -25,33 +24,33 @@ def json_numpy_obj_hook(dct):
         return np.frombuffer(data, dct['dtype']).reshape(dct['shape'])
     return dct
 
-def ascii_encode_dict(data):
-    ascii_encode = lambda x: x.decode('latin9').encode('utf8')
-    return dict(map(ascii_encode, pair) for pair in data.items())
+# def ascii_encode_dict(data):
+#     ascii_encode = lambda x: x.decode('latin9').encode('utf8')
+#     return dict(map(ascii_encode, pair) for pair in data.items())
 
 ### READ PRECOMPUTED VALUES
 file1 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_index.json')
-beer_name_to_index = json.load(file1, encoding='utf8')
+beer_name_to_index = json.load(file1, encoding='utf8') ##1.7mb
 file2 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_index_to_name.json')
-beer_index_to_name = json.load(file2, encoding='utf8')
+beer_index_to_name = json.load(file2, encoding='utf8') ## 1.3mb
 # file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sims.json')
 # beer_sims = json.load(file3, object_hook=json_numpy_obj_hook)
 # file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/doc_voc_matrix.json')
 # doc_voc_matrix = json.load(file4, object_hook=json_numpy_obj_hook)
 file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compressed.json')
-beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook, encoding='utf8')
+beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook, encoding='utf8') ## 60mb
 file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
-features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8')
+features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8') ## 46mb
 file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab.json')
-index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf8')
+index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf8') ##0.7 mb
 file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
-vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf8')
+vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf8') ## 0.7mb
 file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths.json')
-review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8')
+review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8') ## 1mb
 file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
-inv_index = json.load(file8, object_hook=json_numpy_obj_hook)
-file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
-beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook)
+inv_index = json.load(file8, object_hook=json_numpy_obj_hook) ## 7mb
+# file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
+# beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook) ## 11mb
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
