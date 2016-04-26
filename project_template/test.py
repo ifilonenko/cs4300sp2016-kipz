@@ -172,6 +172,8 @@ def beers_from_flavors(flavors, k):
     scores = defaultdict(float)
     beers_flavors = defaultdict(list)
     merged = []
+    flavors = set(flavors)
+
     for flav in flavors:
         postings[flav] = get_postings(inv_index[flav])
         for beer_id, count in postings[flav]:
@@ -180,7 +182,7 @@ def beers_from_flavors(flavors, k):
             
     sorted_flavors = sorted(postings, key = lambda x: len(x), reverse=True)
     
-    if len(flavors) > 1:
+    if len(sorted_flavors) > 1:
         merged = merge_postings(postings[sorted_flavors[0]], postings[sorted_flavors[1]])
         for beer_id, count in merged:
             scores[beer_index_to_name[beer_id]] += 10.0*alpha*count/review_lengths[beer_index_to_name[beer_id]]
