@@ -24,20 +24,20 @@ def index(request):
 		search = ""
 		page = 0
 
-	print(request.META)
-	if (request.META.get('CONTENT_TYPE') == "text/plain"):
-		return render_to_response('project_template/index.html', 
-							  {
-							   'search_params': search,
-							   'page_params': page
-							   })
-	elif (request.META.get('CONTENT_TYPE') == "application/json"):
+	request_type = (request.META["HTTP_ACCEPT"].split(",")[0])
+	if (request_type == "application/json"):
 		output_list = find_similar(search, 5)
 		if (page != 0):
 			output = output_list[0+int(page)*5:5+int(page)*5]
 		else:
 			page = 0
 			output = output_list[0:5]
-		print(output)
 		return JsonResponse(output, content_type="application/json", safe=False)
+		
+	elif (request_type == "text/html"):
+		return render_to_response('project_template/index.html', 
+							  {
+							   'search_params': search,
+							   'page_params': page
+							   })
 
