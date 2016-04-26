@@ -49,8 +49,8 @@ file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths
 review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8') ## 1mb
 file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
 inv_index = json.load(file8, object_hook=json_numpy_obj_hook) ## 7mb
-# file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
-# beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook) ## 11mb
+file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
+beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook) ## 11mb
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):

@@ -112,7 +112,10 @@
             .enter().append("g")
             .attr("transform", function(d, i) {
               return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i))) + ")";
-            }));
+            })
+            .on("mouseover",function(d,i){
+                document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
+            });
 
         // Create rectangles of the correct width
         bar.append("rect")
@@ -195,8 +198,8 @@
             <div id="barchart">
                 <svg class="chart"></svg>
             </div>
-<!--             <div id="popout">
-            </div> -->
+            <div id="popout">
+            </div>
         </div>
     </body>
 </html>
