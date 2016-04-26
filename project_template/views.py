@@ -6,7 +6,7 @@ from django.template import loader
 from .form import QueryForm
 from .test import find_similar
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import json
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -24,7 +24,9 @@ def index(request):
 		else:
 			page = 0
 			output = output_list[0:5]
-
+	else:
+		search = ""
+		page = 0
 	print request.META["CONTENT_TYPE"]
 	print output
 	if (request.META["CONTENT_TYPE"] == "text/plain"):
@@ -36,5 +38,5 @@ def index(request):
 							   })
 	elif (request.META["CONTENT_TYPE"] == "application/json"):
 		print("FINALLY HERE")
-		return HttpResponse(json.dumps(output), content_type="application/json")
+		return JsonResponse(output, content_type="application/json", safe=False)
 
