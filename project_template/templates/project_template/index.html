@@ -21,7 +21,7 @@
                 },
                 success: function(response) {
                     if ("{{ search_params }}"!="") {
-                        if (response[0].length != 3) {
+                        if (response[0].length != 4) {
                             document.getElementById("barchart").innerHTML = response[0]
                         }
                         else {
@@ -65,7 +65,7 @@
              barHeight        = 20,
              groupHeight      = barHeight,
              gapBetweenGroups = 10,
-             spaceForLabels   = 200,
+             spaceForLabels   = 300,
              spaceForLegend   = 150;
 
           // Zip the series data together (first values, second values, etc.)
@@ -83,6 +83,11 @@
         for (var i=0; i<data_updated.length; i++) {
           specifics.push(data_updated[i][2]);
           }
+
+        var flavors = [];
+        for (var i=0; i<data_updated.length; i++) {
+        	flavors.push(data_updated[i][3]);
+        }
 
         // Color scale
         var color = d3.scale.category20();
@@ -114,7 +119,7 @@
               return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i))) + ")";
             })
             .on("mouseover",function(d,i){
-                document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
+                document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>Matched by: " + flavors[i] + "</p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
             });
 
         // Create rectangles of the correct width

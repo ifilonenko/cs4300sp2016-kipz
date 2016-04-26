@@ -207,14 +207,15 @@ def beers_from_flavors(flavors, k):
     
     result = []
     for beer, score in sorted_scores:
-        result.append((beer, score, beers_flavors[beer]))
-    return result
+        result.append((beer, score))
+    return (result, beers_flavors)
 
 
 def find_similar(q, number=5):
     queries = q.split(", ")
     query_list = defaultdict(list)
     result_list = defaultdict(list)
+    beers_flavors = defaultdict(list)
     final_result = {}
     for query in queries:
         query = query.strip().decode('utf-8').encode('ascii', 'replace')
@@ -230,8 +231,8 @@ def find_similar(q, number=5):
                 for elem in roccio_with_pseudo(indx, number):
                     result_list[elem[0].encode('utf-8')].append(elem[1]*100)
         if key == "features":
-            for inx in beers_from_flavors(value, number):
-                (beer_name, score, beer_flavors) = inx
+            (score_data, beers_flavors) = beers_from_flavors(value, number)
+            for (beer_name, score) in score_data:
                 result_list[beer_name.encode('utf-8')].append(score*50)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
@@ -241,5 +242,8 @@ def find_similar(q, number=5):
         beer_id, score = elem
         if beer_id in beer_data_all.keys(): ### ERROR WITH ENCODING
             beer_data = beer_data_all[beer_id]
-            final_final_result.append([beer_id, score, beer_data])
+            if beer_id in beers_flavors.keys():
+                final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id]])
+            else:
+                final_final_result.append([beer_id, score, beer_data, []])
     return final_final_result
