@@ -17,24 +17,24 @@ def index(request):
 	output = ''
 	if request.GET.get('search'):
 		search = request.GET.get('search')
-		output_list = find_similar(search, 2)
-		# paginator = Paginator(output_list, 10)
-		# page = request.GET.get('page')
-		# try:
-		# 	output = paginator.page(page)
-		# except PageNotAnInteger:
-		# 	output = paginator.page(1)
-		# except EmptyPage:
-		# 	output = paginator.page(paginator.num_pages)
+		output_list = find_similar(search, 25)
+		page = request.GET.get('page')
+		if (page != None and page != ""):
+			output = output_list[0+int(page)*5:5+int(page)*5]
+		else:
+			page = 0
+			output = output_list[0:5]
+
 	print request.META["CONTENT_TYPE"]
+	print output
 	if (request.META["CONTENT_TYPE"] == "text/plain"):
 		return render_to_response('project_template/index.html', 
-							  {'output': output_list,
+							  {'output': output,
 							   'magic_url': request.get_full_path(),
-							   'search_params': search
+							   'search_params': search,
+							   'page_params': page
 							   })
 	elif (request.META["CONTENT_TYPE"] == "application/json"):
-		print("hello")
-		data = json.dumps(output_list)
+		data = json.dumps(output)
 		return HttpResponse(data, content_type="application/json")
 

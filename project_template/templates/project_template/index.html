@@ -8,47 +8,6 @@
         <script type='text/javascript' src="{% static 'js/typeahead.bundle.min.js' %}"></script>
         <script type='text/javascript' src="{% static 'js/jquery.js' %}"></script>
         <script src="http://d3js.org/d3.v3.min.js"></script>
-        <style>
-            .chart .legend {
-              fill: black;
-              font: 14px sans-serif;
-              text-anchor: start;
-              font-size: 12px;
-            }
-
-            .chart text {
-              fill: white;
-              font: 10px sans-serif;
-              text-anchor: end;
-            }
-
-            .chart .label {
-              fill: black;
-              font: 14px sans-serif;
-              text-anchor: end;
-            }
-
-            .bar:hover {
-              fill: orange;
-            }
-
-            .axis path,
-            .axis line {
-              fill: none;
-              stroke: #000;
-              shape-rendering: crispEdges;
-            }
-
-            #barchart{
-              float:left;
-              width:50%;
-            }
-
-            #popout{
-              float:right;
-              width: 50%;
-            }
-        </style>
     </head>
     
     <body>
@@ -88,7 +47,9 @@
         <div class="output form-inline global-search">
             <h4>Output</h4>
             <br>
-            {{search_params}}
+            Search values: {{search_params}}
+            <br>
+            Page Number: {{page_params}}
             <br>
             <div id="barchart">
                 <svg class="chart"></svg>
