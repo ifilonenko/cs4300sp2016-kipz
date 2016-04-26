@@ -167,8 +167,8 @@ def beers_from_flavors(flavors, k):
     for flav in flavors:
         postings[flav] = inv_index[flav]
         indx = 0
-        while indx < len(postings[flav])-1)
-            beer_id, count = positions[flav][indx], positions[flav][indx+1]
+        while (indx < len(postings[flav])-1):
+            beer_id, count = postings[flav][indx], postings[flav][indx+1]
             scores[beer_index_to_name[beer_id]] += alpha*count/review_lengths[beer_index_to_name[beer_id]]
             beers_flavors[beer_index_to_name[beer_id]].append(flav)
             indx+=2
