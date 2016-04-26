@@ -133,6 +133,14 @@ def roccio_with_pseudo(q, k = 10):
         result.append((beer_index_to_name[i],sims[i]/sims[asort[0]]))
     return result
 
+def get_postings(int_arr):
+    tuple_arr = []
+    i = 0
+    while i < (len(int_arr) - 1):
+        tuple_arr.append((int_arr[i], int_arr[i+1]))
+        i += 2
+    return tuple_arr
+
 def merge_postings(postings1,postings2):
     """Returns the intersection of postings1 and postings2 with the total count.
 
@@ -165,13 +173,10 @@ def beers_from_flavors(flavors, k):
     beers_flavors = defaultdict(list)
     merged = []
     for flav in flavors:
-        postings[flav] = inv_index[flav]
-        indx = 0
-        while (indx < len(postings[flav])-1):
-            beer_id, count = postings[flav][indx], postings[flav][indx+1]
+        postings[flav] = get_postings(inv_index[flav])
+        for beer_id, count in postings[flav]:
             scores[beer_index_to_name[beer_id]] += alpha*count/review_lengths[beer_index_to_name[beer_id]]
             beers_flavors[beer_index_to_name[beer_id]].append(flav)
-            indx+=2
             
     sorted_flavors = sorted(postings, key = lambda x: len(x), reverse=True)
     
