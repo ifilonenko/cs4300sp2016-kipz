@@ -166,9 +166,12 @@ def beers_from_flavors(flavors, k):
     merged = []
     for flav in flavors:
         postings[flav] = inv_index[flav]
-        for beer_id, count in postings[flav]:
+        indx = 0
+        while indx < len(postings[flav])-1)
+            beer_id, count = positions[flav][indx], positions[flav][indx+1]
             scores[beer_index_to_name[beer_id]] += alpha*count/review_lengths[beer_index_to_name[beer_id]]
             beers_flavors[beer_index_to_name[beer_id]].append(flav)
+            indx+=2
             
     sorted_flavors = sorted(postings, key = lambda x: len(x), reverse=True)
     
