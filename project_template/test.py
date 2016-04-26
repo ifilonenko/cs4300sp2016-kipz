@@ -1,4 +1,5 @@
 from __future__ import print_function
+from .models import Docs
 import os
 import base64
 import json
@@ -39,8 +40,8 @@ beer_index_to_name = json.load(file2, encoding='utf8') ## 1.3mb
 # doc_voc_matrix = json.load(file4, object_hook=json_numpy_obj_hook)
 file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compressed.json')
 beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook, encoding='utf8') ## 60mb
-file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
-features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8') ## 46mb
+# file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
+# features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8') ## 46mb
 file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab.json')
 index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf8') ##0.7 mb
 file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
@@ -63,17 +64,17 @@ def closest_beers(beers_set, beer_index_in, k = 5):
         result.append(beer_index_to_name[i])
     return result
 
-def closest_features(features_set, feature_index_in, k = 5):
-    features_compressed = normalize(features_set.T, axis = 1)
-    feature_vector = features_compressed[feature_index_in,:]
-    sims = (np.dot(features_compressed,feature_vector))/(LA.norm(features_compressed)* LA.norm(feature_vector))
-    asort = np.argsort(-sims)[:k+1]
-    result = []
-    for i in asort[1:]:
-        if i == feature_index_in:
-            continue
-        result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
-    return result
+# def closest_features(features_set, feature_index_in, k = 5):
+#     features_compressed = normalize(features_set.T, axis = 1)
+#     feature_vector = features_compressed[feature_index_in,:]
+#     sims = (np.dot(features_compressed,feature_vector))/(LA.norm(features_compressed)* LA.norm(feature_vector))
+#     asort = np.argsort(-sims)[:k+1]
+#     result = []
+#     for i in asort[1:]:
+#         if i == feature_index_in:
+#             continue
+#         result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
+#     return result
 
 def rocchio(q, relevant, irrelevant, a=.3, b=.3, c=.8, clip = True):
     '''
