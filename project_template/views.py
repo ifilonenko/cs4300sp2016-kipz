@@ -23,8 +23,9 @@ def index(request):
 	else:
 		search = ""
 		page = 0
-	print(request.META.get('CONTENT_TYPE', None))
-	if (request.META.get('CONTENT_TYPE', None) == "text/plain"):
+	print(request.META.get('CONTENT_TYPE'))
+	print(request.META["CONTENT_TYPE"])
+	if (request.META.get('CONTENT_TYPE') == "text/plain"):
 		return render_to_response('project_template/index.html', 
 							  {
 							   'search_params': search,
