@@ -51,6 +51,28 @@
             <br>
             Page Number: {{page_params}}
             <br>
+            <script>
+                {% block content %}
+                $.ajax({
+                    type: "GET",
+                    url: "/",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify({
+                        search: "{{ search_params }}",
+                        page: "{{ page_params }}"
+                    }),
+                    success: function(response) {
+                        console.log("hello");
+                        console.log(response);
+                    },
+                    error: function(response) {
+                        console.log("error");
+                        console.log(response);
+                    }
+                });
+                {% endblock %}
+            </script>
             <div id="barchart">
                 <svg class="chart"></svg>
             </div>

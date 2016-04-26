@@ -35,6 +35,6 @@ def index(request):
 							   'page_params': page
 							   })
 	elif (request.META["CONTENT_TYPE"] == "application/json"):
-		data = json.dumps(output)
-		return HttpResponse(data, content_type="application/json")
+		print("FINALLY HERE")
+		return HttpResponse(json.dumps(output), content_type="application/json")
 
