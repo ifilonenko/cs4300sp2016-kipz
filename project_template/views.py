@@ -23,15 +23,15 @@ def index(request):
 	else:
 		search = ""
 		page = 0
-	print(request.META.get('CONTENT_TYPE'))
-	print(request.META["CONTENT_TYPE"])
+
+	print(request.META)
 	if (request.META.get('CONTENT_TYPE') == "text/plain"):
 		return render_to_response('project_template/index.html', 
 							  {
 							   'search_params': search,
 							   'page_params': page
 							   })
-	elif (request.META.get('CONTENT_TYPE', None) == "application/json"):
+	elif (request.META.get('CONTENT_TYPE') == "application/json"):
 		output_list = find_similar(search, 5)
 		if (page != 0):
 			output = output_list[0+int(page)*5:5+int(page)*5]
