@@ -20,7 +20,14 @@
                     page: "{{ page_params }}"
                 },
                 success: function(response) {
-                        draw_d3(response);
+                    if ("{{ search_params }}"!="") {
+                        if (response[0].length != 3) {
+                            document.getElementById("barchart").innerHTML = response[0]
+                        }
+                        else {
+                            draw_d3(response);
+                        }
+                    }
                 },
                 error: function(response) {
                     console.log("error");
@@ -107,7 +114,7 @@
               return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i))) + ")";
             })
             .on("mouseover",function(d,i){
-                document.getElementById("popout").innerHTML = "<h3>" + labels[i] + "</h3><p>Style: " + specifics[i]['style'] + "</p><p>ABV: " + specifics[i]['ABV'] + "<p>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
+                document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
             });
 
         // Create rectangles of the correct width
@@ -191,24 +198,7 @@
             <div id="barchart">
                 <svg class="chart"></svg>
             </div>
-             <div id="popout">
-            </div>
-            
-            <div class="pagination">
-                <span class="step-links">
-                    {% if output.has_previous %}
-                    <a href= "{{magic_url}}&page={{ output.previous_page_number }}">previous</a>
-                    {% endif %}
-                    
-                    <!-- Showing the page numbers in Html Page -->
-                    <span class="current">
-                    Page _{{ output.number }}_ of _{{ output.paginator.num_pages }}_
-                    </span>
-                    
-                    {% if output.has_next %}
-                    <a href= "{{magic_url}}&page={{ output.next_page_number }}">next</a>
-                    {% endif %}
-                </span>
+            <div id="popout">
             </div>
         </div>
     </body>

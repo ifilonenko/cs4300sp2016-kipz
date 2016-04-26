@@ -13,6 +13,7 @@ from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 import operator
 import io
+import yaml
 
 def json_numpy_obj_hook(dct):
     """Decodes a previously encoded numpy ndarray with proper shape and dtype.
@@ -24,6 +25,10 @@ def json_numpy_obj_hook(dct):
         data = base64.b64decode(dct['__ndarray__'])
         return np.frombuffer(data, dct['dtype']).reshape(dct['shape'])
     return dct
+
+def ascii_encode_dict(data):
+    ascii_encode = lambda x: x.decode('latin9').encode('utf8')
+    return dict(map(ascii_encode, pair) for pair in data.items())
 
 ### READ PRECOMPUTED VALUES
 file1 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_index.json')
@@ -45,9 +50,9 @@ vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf
 file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths.json')
 review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8')
 file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
-inv_index = json.load(file8, object_hook=json_numpy_obj_hook, encoding='utf8')
+inv_index = json.load(file8, encoding='utf8')
 file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
-beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook, encoding='utf8')
+beer_data_all = json.load(file9, encoding='utf8')
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
@@ -213,6 +218,7 @@ def find_similar(q, number=5):
     result_list = defaultdict(list)
     final_result = {}
     for query in queries:
+        query = query.strip().decode('utf-8').encode('ascii', 'replace')
         if query in beer_index_to_name:
             query_list["beer"].append(query)
         elif query in vocab_to_index.keys():
