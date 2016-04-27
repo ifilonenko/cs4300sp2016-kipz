@@ -198,7 +198,11 @@
             <br>
             Search values: {{search_params}}
             <br>
-            Page Number: {{page_params}}
+            Page Number:<span id="page_number"></span>
+            <script>
+                var page_index = {{page_params}};
+                document.getElementById("page_number").innerHTML = " " +(page_index+1);
+            </script>
             <br>
             <div id="barchart">
                 <svg class="chart"></svg>
