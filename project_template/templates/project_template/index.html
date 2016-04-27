@@ -20,7 +20,7 @@
                     page: "{{ page_params }}"
                 },
                 success: function(response) {
-                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".replace("@@", ",");
+                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(",");
                     if ("{{ search_params }}"!="") {
                         if (response[0].length != 4) {
                             document.getElementById("barchart").innerHTML = response[0]
