@@ -30,27 +30,27 @@ def json_numpy_obj_hook(dct):
 #     return dict(map(ascii_encode, pair) for pair in data.items())
 
 ### READ PRECOMPUTED VALUES
-file1 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_index.json')
+file1 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_name_to_index_2.json')
 beer_name_to_index = json.load(file1, encoding='utf8') ##1.7mb
-file2 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_index_to_name.json')
+file2 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_index_to_name_2.json')
 beer_index_to_name = json.load(file2, encoding='utf8') ## 1.3mb
 # file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sims.json')
 # beer_sims = json.load(file3, object_hook=json_numpy_obj_hook)
 # file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/doc_voc_matrix.json')
 # doc_voc_matrix = json.load(file4, object_hook=json_numpy_obj_hook)
-file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compressed.json')
+file3 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beers_compressed_2.json')
 beers_compressed = json.load(file3, object_hook=json_numpy_obj_hook, encoding='utf8') ## 60mb
-# file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed.json')
-# features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8') ## 46mb
-file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab.json')
+file4 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/features_compressed_2.json')
+features_compressed = json.load(file4, object_hook=json_numpy_obj_hook, encoding='utf8') ## 46mb
+file5 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/index_to_vocab_2.json')
 index_to_vocab = json.load(file5, object_hook=json_numpy_obj_hook, encoding='utf8') ##0.7 mb
-file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index.json')
+file6 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/vocab_to_index_2.json')
 vocab_to_index = json.load(file6, object_hook=json_numpy_obj_hook, encoding='utf8') ## 0.7mb
-file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths.json')
+file7 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/review_lengths_2.json')
 review_lengths = json.load(file7, object_hook=json_numpy_obj_hook, encoding='utf8') ## 1mb
-file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index.json')
+file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index_final_2.json')
 inv_index = json.load(file8, object_hook=json_numpy_obj_hook) ## 7mb
-file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all.json')
+file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all_2.json')
 beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook) ## 11mb
 
 
@@ -212,13 +212,17 @@ def beers_from_flavors(flavors, k):
 
 
 def find_similar(q, number=5):
-    queries = q.split(", ")
+    print(q)
+    queries = q.split("@@ ")
+    print(queries)
+    print(queries[0])
     query_list = defaultdict(list)
     result_list = defaultdict(list)
     beers_flavors = defaultdict(list)
     final_result = {}
     for query in queries:
-        query = query.strip().decode('utf-8').encode('ascii', 'replace')
+        query = query.strip().replace("&#39;", "'")
+        print(query)
         if query in beer_index_to_name:
             query_list["beer"].append(query)
         elif query in vocab_to_index.keys():
@@ -229,21 +233,20 @@ def find_similar(q, number=5):
         if key == "beer":
             for indx in value:
                 for elem in roccio_with_pseudo(indx, number):
-                    result_list[elem[0].encode('utf-8')].append(elem[1]*100)
+                    result_list[elem[0]].append(elem[1]*100)
         if key == "features":
             (score_data, beers_flavors) = beers_from_flavors(value, number)
             for (beer_name, score) in score_data:
-                result_list[beer_name.encode('utf-8')].append(score*50)
+                result_list[beer_name].append(score*50)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
     final_final_result = []
     sorted_result = sorted(final_result.items(), key=operator.itemgetter(1), reverse=True)
     for elem in sorted_result:
         beer_id, score = elem
-        if beer_id in beer_data_all.keys(): ### ERROR WITH ENCODING
-            beer_data = beer_data_all[beer_id]
-            if beer_id in beers_flavors.keys():
-                final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id]])
-            else:
-                final_final_result.append([beer_id, score, beer_data, []])
+        beer_data = beer_data_all[beer_id]
+        if beer_id in beers_flavors.keys():
+            final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id]])
+        else:
+            final_final_result.append([beer_id, score, beer_data, []])
     return final_final_result
