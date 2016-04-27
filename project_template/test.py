@@ -212,13 +212,17 @@ def beers_from_flavors(flavors, k):
 
 
 def find_similar(q, number=5):
-    queries = q.split(", ")
+    print(q)
+    queries = q.split("@@ ")
+    print(queries)
+    print(queries[0])
     query_list = defaultdict(list)
     result_list = defaultdict(list)
     beers_flavors = defaultdict(list)
     final_result = {}
     for query in queries:
-        query = query.strip().decode('utf-8').encode('ascii', 'replace')
+        query = query.strip().replace("&#39;", "'")
+        print(query)
         if query in beer_index_to_name:
             query_list["beer"].append(query)
         elif query in vocab_to_index.keys():
@@ -229,21 +233,20 @@ def find_similar(q, number=5):
         if key == "beer":
             for indx in value:
                 for elem in roccio_with_pseudo(indx, number):
-                    result_list[elem[0].encode('utf-8')].append(elem[1]*100)
+                    result_list[elem[0]].append(elem[1]*100)
         if key == "features":
             (score_data, beers_flavors) = beers_from_flavors(value, number)
             for (beer_name, score) in score_data:
-                result_list[beer_name.encode('utf-8')].append(score*50)
+                result_list[beer_name].append(score*50)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
     final_final_result = []
     sorted_result = sorted(final_result.items(), key=operator.itemgetter(1), reverse=True)
     for elem in sorted_result:
         beer_id, score = elem
-        if beer_id in beer_data_all.keys(): ### ERROR WITH ENCODING
-            beer_data = beer_data_all[beer_id]
-            if beer_id in beers_flavors.keys():
-                final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id]])
-            else:
-                final_final_result.append([beer_id, score, beer_data, []])
+        beer_data = beer_data_all[beer_id]
+        if beer_id in beers_flavors.keys():
+            final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id]])
+        else:
+            final_final_result.append([beer_id, score, beer_data, []])
     return final_final_result

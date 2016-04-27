@@ -81,9 +81,9 @@ $(document).ready(function() {
     var query = "";
     for (var i = 0; i < queries.length; i++) {
       var cur_val = queries[i]['textContent'];
-      query += cur_val.slice(1,cur_val.length) + ', ';
+      query += cur_val.slice(1,cur_val.length) + '@@ ';
     }
-    window.location = "/?search=" + query.slice(0,query.length-2);
+    window.location = "/?search=" + query.slice(0,query.length-3);
   };
   $('#search-button').click(function() {
     goToURLQUERY();
