@@ -37,7 +37,8 @@
             {% endblock %}
             
             //function that draws star according to ratings
-            function drawStars(num){
+            function drawStars(n){
+              num = Number(n)
               full_star = '<img src="{% static 'star1.png' %}">'
               half_star = '<img src="{% static 'star_half.png' %}">'
               if (num === parseInt(num, 10))
