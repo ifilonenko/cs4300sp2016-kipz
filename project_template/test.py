@@ -13,6 +13,7 @@ from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 import operator
 import io
+import math
 
 def json_numpy_obj_hook(dct):
     """Decodes a previously encoded numpy ndarray with proper shape and dtype.
@@ -64,17 +65,17 @@ def closest_beers(beers_set, beer_index_in, k = 5):
         result.append(beer_index_to_name[i])
     return result
 
-# def closest_features(features_set, feature_index_in, k = 5):
-#     features_compressed = normalize(features_set.T, axis = 1)
-#     feature_vector = features_compressed[feature_index_in,:]
-#     sims = (np.dot(features_compressed,feature_vector))/(LA.norm(features_compressed)* LA.norm(feature_vector))
-#     asort = np.argsort(-sims)[:k+1]
-#     result = []
-#     for i in asort[1:]:
-#         if i == feature_index_in:
-#             continue
-#         result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
-#     return result
+def closest_features(features_set, feature_index_in, k = 5):
+    features_compressed = normalize(features_set.T, axis = 1)
+    feature_vector = features_compressed[feature_index_in,:]
+    sims = (np.dot(features_compressed,feature_vector))/(LA.norm(features_compressed)* LA.norm(feature_vector))
+    asort = np.argsort(-sims)[:k+1]
+    result = []
+    for i in asort[1:]:
+        if i == feature_index_in:
+            continue
+        result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
+    return result
 
 def rocchio(q, relevant, irrelevant, a=.3, b=.3, c=.8, clip = True):
     '''
@@ -210,6 +211,64 @@ def beers_from_flavors(flavors, k):
         result.append((beer, score))
     return (result, beers_flavors)
 
+def beers_from_flavors_and_similar(flavors, k, z):
+    """ Returns the top k beers with these flavors and their z similar flavors.
+    
+    flavors: a list of flavors
+    
+    Returns
+    beers: a dictionary of scores for each beer with these flavors and the flavors that beer has
+    
+    """    
+    alpha = 10.0 # query flavors
+    beta = 5.0 # similar flavors
+    postings = defaultdict(list)
+    scores = defaultdict(float)
+    beers_flavors = defaultdict(list)
+    similar_flavors = []
+    merged = []
+    flavors = set(flavors)
+
+    sim_flavors = []
+    for flav in flavors:
+        postings[flav] = get_postings(inv_index[flav])
+        for beer_id, count in postings[flav]:
+            scores[beer_index_to_name[beer_id]] += alpha*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
+            beers_flavors[beer_index_to_name[beer_id]].append(flav)
+        sim_flavors = closest_features(features_compressed, vocab_to_index[flav], z)
+        for (sim_flav, sim_score) in sim_flavors:
+            if not(sim_flav in postings.keys()):
+                similar_flavors.append(sim_flav)
+                postings[sim_flav] = get_postings(inv_index[sim_flav])
+                for beer_id, count in postings[sim_flav]:
+                    scores[beer_index_to_name[beer_id]] += beta*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
+                    beers_flavors[beer_index_to_name[beer_id]].append(sim_flav)     
+            
+    sorted_flavors = sorted(postings, key = lambda x: len(x), reverse=True)
+    
+    if len(sorted_flavors) > 1:
+        merged = merge_postings(postings[sorted_flavors[0]], postings[sorted_flavors[1]])
+        for beer_id, count in merged:
+            scores[beer_index_to_name[beer_id]] += 10.0*alpha*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
+        if len(sorted_flavors) > 2:
+            i = 2
+            while i < len(sorted_flavors):
+                try_merged = merge_postings(merged, postings[sorted_flavors[i]])
+                if len(try_merged) > 0:
+                    merged = try_merged
+                    for beer_id, count in merged:
+                        scores[beer_index_to_name[beer_id]] += (i*10)*alpha*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
+                i += 1
+    
+    for beer_id, count in merged:
+        scores[beer_index_to_name[beer_id]] = scores[beer_index_to_name[beer_id]]*len(flavors)*len(similar_flavors)
+            
+    sorted_scores = sorted(scores.items(), key=operator.itemgetter(1), reverse=True)[:k]
+    
+    result = []
+    for beer, score in sorted_scores:
+        result.append((beer, score))
+    return (result, beers_flavors)
 
 def find_similar(q, number=5):
     print(q)
@@ -235,7 +294,7 @@ def find_similar(q, number=5):
                 for elem in roccio_with_pseudo(indx, number):
                     result_list[elem[0]].append(elem[1]*100)
         if key == "features":
-            (score_data, beers_flavors) = beers_from_flavors(value, number)
+            (score_data, beers_flavors) = beers_from_flavors_and_similar(value, number, 10)
             for (beer_name, score) in score_data:
                 result_list[beer_name].append(score*50)
     for k,v in result_list.iteritems():
