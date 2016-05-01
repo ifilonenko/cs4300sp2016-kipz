@@ -1,15 +1,167 @@
 <html>
     <head>
         {% load staticfiles %}
-        <link rel="stylesheet" href="/static/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         <link rel="stylesheet" href="/static/main.css">
         <script type='text/javascript' src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
+        <script type='text/javascript' src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
         <script type='text/javascript' src="{% static 'js/typeahead.bundle.min.js' %}"></script>
         <script type='text/javascript' src="{% static 'js/jquery.js' %}"></script>
+        <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script>
+            {% block content %}
+            $.ajax({
+                type: "GET",
+                url: "/",
+                contentType: "application/json",
+                dataType: "json",
+                data: {
+                    search: "{{ search_params }}",
+                    page: "{{ page_params }}"
+                },
+                success: function(response) {
+                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(",");
+                    if ("{{ search_params }}"!="") {
+                        if (response[0].length != 4) {
+                            document.getElementById("barchart").innerHTML = response[0]
+                        }
+                        else {
+                            draw_d3(response);
+                        }
+                    }
+                },
+                error: function(response) {
+                    console.log("error");
+                }
+            });
+            {% endblock %}
+            
+            //function that draws star according to ratings
+            function drawStars(n){
+              num = Number(n)
+              full_star = '<img src="{% static 'star1.png' %}">'
+              half_star = '<img src="{% static 'star_half.png' %}">'
+              if (num === parseInt(num, 10))
+                return repeat(full_star,num)
+              else
+                inte = parseInt(num)
+                return repeat(full_star,inte) + half_star
+            }
+
+            //helper code taken from stackoverflow
+            function repeat(pattern, count) {
+            if (count < 1) return '';
+            var result = '';
+            while (count > 1) {
+                if (count & 1) result += pattern;
+                count >>= 1, pattern += pattern;
+            }
+            return result + pattern;
+            }
+
+            //function that draws the d3
+
+            function draw_d3(data_updated){
+
+                 var chartWidth       = 300,
+                     barHeight        = 20,
+                     groupHeight      = barHeight,
+                     gapBetweenGroups = 10,
+                     spaceForLabels   = 350,
+                     spaceForLegend   = 150;
+
+                  // Zip the series data together (first values, second values, etc.)
+                var zippedData = [];
+                for (var i=0; i<data_updated.length; i++) {
+                    zippedData.push(data_updated[i][1]);
+                  }
+
+                var labels = [];
+                for (var i=0; i<data_updated.length; i++) {
+                    labels.push(data_updated[i][0]);
+                  }
+
+                var specifics = [];
+                for (var i=0; i<data_updated.length; i++) {
+                  specifics.push(data_updated[i][2]);
+                  }
+
+                var flavors = [];
+                for (var i=0; i<data_updated.length; i++) {
+                	flavors.push(data_updated[i][3]);
+                }
+
+                // Color scale
+                var color = d3.scale.category20();
+                var chartHeight = barHeight * zippedData.length + gapBetweenGroups * labels.length;
+
+                var x = d3.scale.linear()
+                    .domain([0, d3.max(zippedData)])
+                    .range([0, chartWidth]);
+
+                var y = d3.scale.linear()
+                    .range([chartHeight + gapBetweenGroups, 0]);
+
+                var yAxis = d3.svg.axis()
+                    .scale(y)
+                    .tickFormat('')
+                    .tickSize(0)
+                    .orient("left");
+
+                // Specify the chart area and dimensions
+                var chart = d3.select(".chart")
+                    .attr("width", spaceForLabels + chartWidth + spaceForLegend)
+                    .attr("height", chartHeight);
+
+                // Create bars
+                var bar = chart.selectAll("g")
+                    .data(zippedData)
+                    .enter().append("g")
+                    .attr("transform", function(d, i) {
+                      return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i))) + ")";
+                    })
+                    .on("mouseover",function(d,i){
+                        document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>Matched by: " + flavors[i] + "</p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
+                    });
+
+                // Create rectangles of the correct width
+                bar.append("rect")
+                    .attr("fill", function(d,i) { return color(i % 1); })
+                    .attr("class", "bar")
+                    .attr("width", x)
+                    .attr("height", barHeight - 1);
+
+
+                // Add text label in bar
+                bar.append("text")
+                    .attr("x", function(d) { return x(d) - 3; })
+                    .attr("y", barHeight / 2)
+                    .attr("fill", "red")
+                    .attr("dy", ".35em")
+                    .text(function(d) { return Math.round(d * 100) / 100; });
+
+                // Draw labels
+                bar.append("text")
+                    .attr("class", "label")
+                    .attr("x", function(d) { return - 10; })
+                    .attr("y", groupHeight / 2)
+                    .attr("dy", ".35em")
+                    .text(function(d,i) {
+                      if (i % 1 === 0)
+                        return labels[Math.floor(i)];
+                      else
+                        return ""});
+
+                chart.append("g")
+                      .attr("class", "y axis")
+                      .attr("transform", "translate(" + spaceForLabels + ", " + -gapBetweenGroups/2 + ")")
+                      .call(yAxis);
+
+            };
+        </script>
     </head>
     
     <body>
-        <!-- TODO: Please change lines 10 and 11 according to your actual project name and student names-->
         <div class="topcorner">
             <p>Beer Recommendation</p>
             <p>Ilan Filonenko: if56</p>
@@ -32,35 +184,33 @@
             <br><br>
             
             <div id="the-basics" class="form-group">
-                <input id="input" type="text" name="search" class="typeahead form-control" placeholder="Beer Name">
+                <input id="input1" type="text" name="search" class="typeahead form-control" placeholder="Beer Name (e.g. 'Guinness Black Lager', 'Yuengling IPA', etc.)">
             </div>
             <div id="the-features" class="form-group">
-                <input id="input" type="text" name="search_features" class="typeahead form-control" placeholder="Beer Feature">
+                <input id="input2" type="text" name="search_features" class="typeahead form-control" placeholder="Beer Characteristic (e.g. 'dark', 'spicy', 'citrus', etc)">
             </div>
-            <button id="search-button" type="submit" class="btn btn-info"> Go! </button>
+            <button id="search-button" type="button" class="btn btn-info"> Go! </button>
         </form>
-        
+        <div class="container-multi" style="margin-left: 10.5em;">
+            <ul id="choices" class="choices" style="list-style: none;"> 
+            </ul>
+        </div>
         <div class="output form-inline global-search">
-            <h4>Output</h4><br>
-            {% for line in output %}
-                {{line}}<br>
-            {% endfor %}
-            
-            <div class="pagination">
-                <span class="step-links">
-                    {% if output.has_previous %}
-                    <a href= "{{magic_url}}&page={{ output.previous_page_number }}">previous</a>
-                    {% endif %}
-                    
-                    <!-- Showing the page numbers in Html Page -->
-                    <span class="current">
-                    Page _{{ output.number }}_ of _{{ output.paginator.num_pages }}_
-                    </span>
-                    
-                    {% if output.has_next %}
-                    <a href= "{{magic_url}}&page={{ output.next_page_number }}">next</a>
-                    {% endif %}
-                </span>
+            <h4>Output</h4>
+            <br>
+            <div id="search-value">
+            </div>
+            <br>
+            Page Number:<span id="page_number"></span>
+            <script>
+                var page_index = {{page_params}};
+                document.getElementById("page_number").innerHTML = " " +(page_index+1);
+            </script>
+            <br>
+            <div id="barchart">
+                <svg class="chart"></svg>
+            </div>
+            <div id="popout">
             </div>
         </div>
     </body>
