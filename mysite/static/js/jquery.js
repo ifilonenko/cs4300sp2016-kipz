@@ -107,7 +107,6 @@ $(document).ready(function() {
         + '</li>');
     }
     document.getElementById("search-button").disabled = false;
-    console.log(message);
   });
   $("#the-features .typeahead").blur(function(){
     var message = this.value;
@@ -122,7 +121,6 @@ $(document).ready(function() {
         + '</li>');
     }
     document.getElementById("search-button").disabled = false;
-    console.log(message);
   });
   $("#the-breweries .typeahead").blur(function(){
     var message = this.value;
@@ -137,7 +135,6 @@ $(document).ready(function() {
         + '</li>');
     }
     document.getElementById("search-button").disabled = false;
-    console.log(message);
   });
   $('.choices').on('click', 'li', function(e) {
     $(this).remove();
