@@ -185,6 +185,13 @@ def merge_postings(postings1,postings2):
             j += 1
     return merged_posting
 
+def normalize_scores(result_list):
+    sum_of_squares = 0
+    for beer, score in result_list:
+        sum_of_squares += score*score
+    norm = math.sqrt(sum_of_squares)
+    return [(beer, score/norm) for (beer, score) in result_list]
+
 def beers_from_flavors(flavors, k):
     """ 
     Returns the top k beers with these flavors.
@@ -304,7 +311,10 @@ def beers_from_flavors_and_similar(flavors, k, z):
     result = []
     for beer, score in sorted_scores:
         result.append((beer, score))
-    return (result, beers_flavors)
+
+    normalized_result = normalize_scores(result)
+
+    return (normalized_result, beers_flavors)
 
 def find_similar(q, version="new",number=5):
     queries = q.split("@@ ")
