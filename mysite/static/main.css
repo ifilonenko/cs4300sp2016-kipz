@@ -164,6 +164,7 @@ color: #4285F4;
 
 #search-button{
   background-color: #867F27;
+  display:block;
 }
 
 .chart .legend {
