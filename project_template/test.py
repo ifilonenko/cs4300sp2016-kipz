@@ -154,6 +154,14 @@ def roccio_with_pseudo(q, k = 10):
     return result
 
 def get_postings(int_arr):
+    """Helper function for merge_postings.
+
+    Arguments:
+        int_arr: an integer array of postings and counts.
+
+    Returns:
+        tupple_arr: a tuple array of postings and counts.
+    """
     tuple_arr = []
     i = 0
     while i < (len(int_arr) - 1):
@@ -162,7 +170,8 @@ def get_postings(int_arr):
     return tuple_arr
 
 def merge_postings(postings1,postings2):
-    """Returns the intersection of postings1 and postings2 with the total count.
+    """
+    Returns the intersection of postings1 and postings2 with the total count.
 
     """
     merged_posting = []
@@ -179,12 +188,14 @@ def merge_postings(postings1,postings2):
     return merged_posting
 
 def beers_from_flavors(flavors, k):
-    """ Returns the top k beers with these flavors.
+    """ 
+    Returns the top k beers with these flavors.
     
-    flavors: a list of flavors
+    Arguments:
+        flavors: a list of flavors
     
-    Returns
-    beers: a dictionary of scores for each beer with these flavors and the flavors that beer has
+    Returns:
+        beers: a dictionary of scores for each beer with these flavors and the flavors that beer has
     
     """
     alpha = 10.0
@@ -225,14 +236,19 @@ def beers_from_flavors(flavors, k):
     return (result, beers_flavors)
 
 def beers_from_flavors_and_similar(flavors, k, z):
-    """ Returns the top k beers with these flavors and their z similar flavors.
+    """ 
+    Returns the top k beers with these flavors and their z similar flavors.
     
-    flavors: a list of flavors
+    Arguments:
+        flavors: a list of flavors (query)
+        k: how many beers you want
+        z: how many similar flavors to use per query flavor
     
     Returns
-    beers: a dictionary of scores for each beer with these flavors and the flavors that beer has
+        result: a dictionary of scores for each beer with these flavors or similar ones
+        beers_flavors: a dictionary of beers and and the flavors that beer has
     
-    """    
+    """     
     alpha = 10.0 # query flavors
     beta = 5.0 # similar flavors
     postings = defaultdict(list)
@@ -258,19 +274,28 @@ def beers_from_flavors_and_similar(flavors, k, z):
                     beers_flavors[beer_index_to_name[beer_id]].append(sim_flav)     
             
     sorted_flavors = sorted(postings, key = lambda x: len(x), reverse=True)
+    weight = alpha
     
     if len(sorted_flavors) > 1:
         merged = merge_postings(postings[sorted_flavors[0]], postings[sorted_flavors[1]])
         for beer_id, count in merged:
-            scores[beer_index_to_name[beer_id]] += 10.0*alpha*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
+            if sorted_flavors[1] in flavors:
+                weight = alpha
+            else:
+                weight = beta
+            scores[beer_index_to_name[beer_id]] += (10.0)*weight*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
         if len(sorted_flavors) > 2:
             i = 2
             while i < len(sorted_flavors):
                 try_merged = merge_postings(merged, postings[sorted_flavors[i]])
                 if len(try_merged) > 0:
                     merged = try_merged
+                    if sorted_flavors[i] in flavors:
+                        weight = alpha
+                    else:
+                        weight = beta
                     for beer_id, count in merged:
-                        scores[beer_index_to_name[beer_id]] += (i*10)*alpha*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
+                        scores[beer_index_to_name[beer_id]] += (i*10.0)*weight*math.log(count)/review_lengths[beer_index_to_name[beer_id]]
                 i += 1
     
     for beer_id, count in merged:
