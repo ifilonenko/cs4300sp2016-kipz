@@ -17,7 +17,7 @@
                 dataType: "json",
                 data: {
                     search: "{{ search_params }}".replace("~~", "&"),
-                    page: "{{ page_params }}"
+                    version: "{{ version }}"
                 },
                 success: function(response) {
                     document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ").replace("~~", "&");
@@ -174,11 +174,13 @@
     
     <body>
         <div class="topcorner">
-            <p>Beer Recommendation</p>
+            <p>Beergle</p>
             <p>Ilan Filonenko: if56</p>
             <p>Kelsey Duncan: ked83</p>
             <p>Pujaa Rajan: pr3388</p>
             <p>Zheng Yao: zy87</p>
+            <input type="radio" name="version_type" value="new" checked="checked"> New<br>
+            <input type="radio" name="version_type" value="old"> Old<br>
         </div>
         
         <div id="transparent">

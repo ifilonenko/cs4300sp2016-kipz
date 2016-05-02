@@ -141,12 +141,14 @@ $(document).ready(function() {
   });
   function goToURLQUERY() {
     var queries = document.getElementById("choices").getElementsByTagName("li");
+    var version_type = document.querySelector('input[name="version_type"]:checked').value;
+    console.log(version_type);
     var query = "";
     for (var i = 0; i < queries.length; i++) {
       var cur_val = queries[i]['textContent'];
       query += cur_val.slice(1,cur_val.length) + '@@ ';
     }
-    window.location = "/?search=" + query.slice(0,query.length-3).replace("&", "~~");
+    window.location = "/?search=" + query.slice(0,query.length-3).replace("&", "~~") + "&version="+version_type;
   };
   $('#search-button').click(function() {
     goToURLQUERY();

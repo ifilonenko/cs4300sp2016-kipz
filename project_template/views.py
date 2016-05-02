@@ -16,6 +16,7 @@ def index(request):
 	version = request.GET.get('version','new')
 	request_type = (request.META["HTTP_ACCEPT"].split(",")[0])
 	print(search)
+	print(version)
 	if (request_type == "application/json"):
 		output = find_similar(search,version,10)
 		return JsonResponse(output, content_type="application/json", safe=False)
@@ -23,6 +24,7 @@ def index(request):
 	elif (request_type == "text/html"):
 		return render_to_response('project_template/index.html', 
 							  {
-							   'search_params': search
+							   'search_params': search,
+							   'version':version
 							  })
 
