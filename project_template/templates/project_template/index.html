@@ -20,7 +20,9 @@
                     page: "{{ page_params }}"
                 },
                 success: function(response) {
-                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(",");
+                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ");
+                    var page_index = parseInt("{{page_params}}");
+                    document.getElementById("page-number").innerHTML = "Page Number: " +(page_index+1);
                     if ("{{ search_params }}"!="") {
                         if (response[0].length != 4) {
                             document.getElementById("barchart").innerHTML = response[0]
@@ -90,6 +92,11 @@
                 for (var i=0; i<data_updated.length; i++) {
                 	flavors.push(data_updated[i][3]);
                 }
+                var beer_advocate_url = [];
+                for (var i=0; i<data_updated.length; i++) {
+                    beer_advocate_url.push("http://www.beeradvocate.com/beer/profile/" + data_updated[i][2]["brewerId"] + "/" + data_updated[i][2]["beerId"]);
+                }
+                console.log(labels);
 
                 // Color scale
                 var color = d3.scale.category20();
@@ -121,7 +128,7 @@
                       return "translate(" + spaceForLabels + "," + (i * barHeight + gapBetweenGroups * (0.5 + Math.floor(i))) + ")";
                     })
                     .on("mouseover",function(d,i){
-                        document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>Matched by: " + flavors[i] + "</p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
+                        document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>Matched by: " + flavors[i].join(", ") + "</p><p class='innerpopout'>Link to beer: <a href=" + beer_advocate_url[i] + ">here</a></p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
                     });
 
                 // Create rectangles of the correct width
@@ -151,6 +158,7 @@
                         return labels[Math.floor(i)];
                       else
                         return ""});
+
 
                 chart.append("g")
                       .attr("class", "y axis")
@@ -201,15 +209,13 @@
             <div id="search-value">
             </div>
             <br>
-            Page Number:<span id="page_number"></span>
-            <script>
-                var page_index = {{page_params}};
-                document.getElementById("page_number").innerHTML = " " +(page_index+1);
-            </script>
-            <br>
             <div id="barchart">
                 <svg class="chart"></svg>
             </div>
+            <br>
+            <div id="page-number">
+            </div>
+            <br>
             <div id="popout">
             </div>
         </div>

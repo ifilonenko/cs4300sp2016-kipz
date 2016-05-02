@@ -53,6 +53,10 @@ file8 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/inv_index_fina
 inv_index = json.load(file8, object_hook=json_numpy_obj_hook) ## 7mb
 file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all_2.json')
 beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook) ## 11mb
+file10 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sentiment.json')
+beer_sentiment = json.load(file10, object_hook=json_numpy_obj_hook) ## 1.5mb
+fil11 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/brewery_to_beer.json')
+brewery_to_beer = json.load(fil11, object_hook=json_numpy_obj_hook) ## 0.08mb
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
@@ -286,6 +290,8 @@ def find_similar(q, number=5):
             query_list["beer"].append(query)
         elif query in vocab_to_index.keys():
             query_list["features"].append(query)
+        elif query in brewery_to_beer.keys():
+            query_list["brewery"].append(query)
         else:
            return ["We don't have %s in our system" % query] 
     for key,value in query_list.iteritems():
@@ -294,9 +300,14 @@ def find_similar(q, number=5):
                 for elem in roccio_with_pseudo(indx, number):
                     result_list[elem[0]].append(elem[1]*100)
         if key == "features":
-            (score_data, beers_flavors) = beers_from_flavors_and_similar(value, number, 10)
+            (score_data, beers_flavors) = beers_from_flavors_and_similar(value, number, 5)
             for (beer_name, score) in score_data:
                 result_list[beer_name].append(score*50)
+        if key == "brewery":
+            for indx in value:
+                for inner_indx in brewery_to_beer[indx]:
+                    for elem in roccio_with_pseudo(inner_indx, number):
+                        result_list[elem[0]].append(elem[1]*100)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
     final_final_result = []
