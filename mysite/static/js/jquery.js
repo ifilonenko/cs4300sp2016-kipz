@@ -146,7 +146,7 @@ $(document).ready(function() {
       var cur_val = queries[i]['textContent'];
       query += cur_val.slice(1,cur_val.length) + '@@ ';
     }
-    window.location = "/?search=" + query.slice(0,query.length-3);
+    window.location = "/?search=" + query.slice(0,query.length-3).replace("&", "~~");
   };
   $('#search-button').click(function() {
     goToURLQUERY();

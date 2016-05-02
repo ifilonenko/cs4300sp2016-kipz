@@ -16,14 +16,15 @@
                 contentType: "application/json",
                 dataType: "json",
                 data: {
-                    search: "{{ search_params }}",
+                    search: "{{ search_params }}".replace("~~", "&"),
                     page: "{{ page_params }}"
                 },
                 success: function(response) {
-                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ");
+                    document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ").replace("~~", "&");
                     if ("{{ search_params }}"!="") {
                         if (response[0].length != 4) {
-                            document.getElementById("barchart").innerHTML = response[0]
+                            console.log("{{search_params}}");
+                            document.getElementById("search-value").innerHTML = response[0]
                         }
                         else {
                             draw_d3(response);

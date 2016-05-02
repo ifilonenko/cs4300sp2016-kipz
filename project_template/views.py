@@ -12,17 +12,12 @@ from django.http import JsonResponse
 # Create your views here.
 def index(request):
 	output = []
-	if request.GET.get('search'):
-		search = request.GET.get('search')
-	else:
-		search = ""
-	if request.GET.get('version'):
-		version = request.GET.get('version')
-	else:
-		version = "new"
+	search = request.GET.get('search','')
+	version = request.GET.get('version','new')
 	request_type = (request.META["HTTP_ACCEPT"].split(",")[0])
+	print(search)
 	if (request_type == "application/json"):
-		output = find_similar(search, 10)
+		output = find_similar(search,version,10)
 		return JsonResponse(output, content_type="application/json", safe=False)
 		
 	elif (request_type == "text/html"):

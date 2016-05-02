@@ -308,11 +308,8 @@ def beers_from_flavors_and_similar(flavors, k, z):
         result.append((beer, score))
     return (result, beers_flavors)
 
-def find_similar(q, number=5):
-    print(q)
+def find_similar(q, version="new",number=5):
     queries = q.split("@@ ")
-    print(queries)
-    print(queries[0])
     query_list = defaultdict(list)
     result_list = defaultdict(list)
     beers_flavors = defaultdict(list)
