@@ -254,8 +254,8 @@ ul {
   font-size:24px !important;
 }
 .text-body{
-  font-size: 15px; 
-  font-family:Futura; 
+  font-size: 13px; 
   color: #643B0F;
+  padding-top:0px !important;
   margin-top:0px !important;
 }
