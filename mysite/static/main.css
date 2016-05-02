@@ -165,6 +165,9 @@ color: #4285F4;
 #search-button{
   background-color: #867F27;
   display:block;
+  margin-right:auto;
+  margin-left:auto;
+  margin-top:1em;
 }
 
 .chart .legend {
@@ -226,4 +229,8 @@ color: #4285F4;
     background-color: rgba(239, 224, 185, .8);
     border-radius:30px;
     padding-bottom: 30px;
+}
+ul {
+  margin:0;
+  padding: 0;
 }
