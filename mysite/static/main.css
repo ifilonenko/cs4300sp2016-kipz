@@ -249,3 +249,9 @@ ul {
   margin-right:1em;
   font-size:24px !important;
 }
+.text-body{
+  font-size: 15px; 
+  font-family:Futura; 
+  color: #643B0F;
+  margin-top:0px !important;
+}
