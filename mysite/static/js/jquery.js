@@ -142,7 +142,6 @@ $(document).ready(function() {
   function goToURLQUERY() {
     var queries = document.getElementById("choices").getElementsByTagName("li");
     var version_type = document.querySelector('input[name="version_type"]:checked').value;
-    console.log(version_type);
     var query = "";
     for (var i = 0; i < queries.length; i++) {
       var cur_val = queries[i]['textContent'];

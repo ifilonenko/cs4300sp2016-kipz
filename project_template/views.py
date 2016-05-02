@@ -15,8 +15,6 @@ def index(request):
 	search = request.GET.get('search','')
 	version = request.GET.get('version','new')
 	request_type = (request.META["HTTP_ACCEPT"].split(",")[0])
-	print(search)
-	print(version)
 	if (request_type == "application/json"):
 		output = find_similar(search,version,10)
 		return JsonResponse(output, content_type="application/json", safe=False)

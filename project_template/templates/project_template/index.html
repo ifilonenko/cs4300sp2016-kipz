@@ -23,7 +23,6 @@
                     document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ").replace("~~", "&");
                     if ("{{ search_params }}"!="") {
                         if (response[0].length != 4) {
-                            console.log("{{search_params}}");
                             document.getElementById("search-value").innerHTML = response[0]
                         }
                         else {
@@ -95,7 +94,6 @@
                 for (var i=0; i<data_updated.length; i++) {
                     beer_advocate_url.push("http://www.beeradvocate.com/beer/profile/" + data_updated[i][2]["brewerId"] + "/" + data_updated[i][2]["beerId"]);
                 }
-                console.log(labels);
 
                 // Color scale
                 var color = d3.scale.category20();
