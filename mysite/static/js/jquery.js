@@ -54,7 +54,7 @@ $(document).ready(function() {
     source: substringMatcher(breweries),
     limit: 7
   });
-  $("#the-basics .typeahead").click(function(){
+  $("#the-basics .typeahead").blur(function(){
     var message = this.value;
     if (message != "") {
       $(this).val("");
@@ -69,7 +69,7 @@ $(document).ready(function() {
     document.getElementById("search-button").disabled = false;
     console.log(message);
   });
-  $("#the-features .typeahead").click(function(){
+  $("#the-features .typeahead").blur(function(){
     var message = this.value;
     if (message != "") {
       $(this).val("");

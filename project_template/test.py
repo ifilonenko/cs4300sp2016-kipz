@@ -104,7 +104,15 @@ def rocchio(q, relevant, irrelevant, a=.3, b=.3, c=.8, clip = True):
     relevant_vector = sum(x for x in relevant_vectors)
     irrelevant_vectors =[beers_compressed[beer_name_to_index[x],:] for x in irrelevant]  
     irrelevant_vector = sum(x for x in irrelevant_vectors)
-    
+    if q in beer_sentiment.keys():
+        if (beer_sentiment[q] == 0.0):
+            print("shitty beer")
+            a -= 0.1
+        elif (beer_sentiment[q] == 1.0):
+            print("good beer")
+            a += 0.1
+        else: 
+            a += 0.0
     first_term = (a*beers_vector)
     if not relevant:
         second_term = 0
@@ -114,6 +122,7 @@ def rocchio(q, relevant, irrelevant, a=.3, b=.3, c=.8, clip = True):
         third_term = 0
     else:
         third_term = ((c*irrelevant_vector)/(len(set(irrelevant))))
+
     if clip:
         final = (first_term + second_term - third_term).clip(min=0)
     else:
