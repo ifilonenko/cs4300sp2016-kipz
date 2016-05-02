@@ -21,8 +21,6 @@
                 },
                 success: function(response) {
                     document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ");
-                    var page_index = parseInt("{{page_params}}");
-                    document.getElementById("page-number").innerHTML = "Page Number: " +(page_index+1);
                     if ("{{ search_params }}"!="") {
                         if (response[0].length != 4) {
                             document.getElementById("barchart").innerHTML = response[0]
@@ -197,14 +195,17 @@
             <br><br>
             
             <div id="the-basics" class="form-group">
-                <input id="input1" type="text" name="search" class="typeahead form-control" placeholder="Beer Name (e.g. 'Guinness Black Lager', 'Yuengling IPA', etc.)">
+                <input id="input1" type="text" name="search" class="typeahead form-control" placeholder="Beer Name (e.g. 'Guinness Black Lager', 'Yuengling IPA', etc.)"></input>
             </div>
+            <button id="add-button" type="button" class="btn btn-info">Add</button>
             <div id="the-features" class="form-group">
                 <input id="input2" type="text" name="search_features" class="typeahead form-control" placeholder="Beer Characteristic (e.g. 'dark', 'spicy', 'citrus', etc)">
             </div>
+            <button id="add-button" type="button" class="btn btn-info">Add</button>
             <div id="the-breweries" class="form-group">
                 <input id="input3" type="text" name="search_breweries" class="typeahead form-control" placeholder="Breweries (e.g. 'Anadolu Efes Brewery', 'Wickwar Brewing Company')">
             </div>
+            <button id="add-button" type="button" class="btn btn-info">Add</button>
             <div class="container-multi" style="display: block;">
                 <ul id="choices" class="choices" style="list-style: none;"> 
                 </ul>
@@ -214,12 +215,10 @@
         </div>
         <div class="output form-inline global-search">
            <div id="overalloutput">
-            <div id="search-value">
-            </div>
+            <h1 id="search-value">
+            </h1>
             <div id="barchart">
                 <svg class="chart"></svg>
-              <div id="page-number">
-            </div>
             </div>
             <div id="popout">
             </div>

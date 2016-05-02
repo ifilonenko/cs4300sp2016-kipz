@@ -23,7 +23,7 @@ def index(request):
 	else:
 		search = ""
 		page = 0
-
+	print search
 	request_type = (request.META["HTTP_ACCEPT"].split(",")[0])
 	if (request_type == "application/json"):
 		output_list = find_similar(search, 5)

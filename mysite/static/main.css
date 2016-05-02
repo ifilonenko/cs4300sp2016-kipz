@@ -169,7 +169,10 @@ color: #4285F4;
   margin-left:auto;
   margin-top:1em;
 }
-
+#add-button{
+  background-color: #867F27;
+  margin-top: -1em;
+}
 .chart .legend {
   fill: black;
   font: 14px sans-serif;
@@ -203,6 +206,7 @@ color: #4285F4;
 #barchart{
   width:50%;
   float:left;
+  padding-right:7em;
   padding-top: 30px;
 }
 
@@ -234,4 +238,12 @@ color: #4285F4;
 ul {
   margin:0;
   padding: 0;
+}
+.form-group {
+  margin-bottom: 1em !important;
+}
+#search-value {
+  text-align: center;
+  display:block;
+  font-size:24px !important;
 }
