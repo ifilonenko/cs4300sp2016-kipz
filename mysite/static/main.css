@@ -11,6 +11,7 @@ text-align:center;
 body {
 padding-top: 5%;
 padding-bottom: 15px;
+background: url('bg.jpg') no-repeat center center fixed;
 }
 .global-search {
 text-align:center;
