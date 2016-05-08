@@ -22,7 +22,7 @@
                 success: function(response) {
                     document.getElementById("search-value").innerHTML = "Search values: " + "{{search_params}}".split("@@").join(", ").replace("~~", "&");
                     if ("{{ search_params }}"!="") {
-                        if (response[0].length != 4) {
+                        if (response[0].length != 5) {
                             document.getElementById("search-value").innerHTML = response[0]
                         }
                         else {
@@ -94,7 +94,12 @@
                 for (var i=0; i<data_updated.length; i++) {
                     beer_advocate_url.push("http://www.beeradvocate.com/beer/profile/" + data_updated[i][2]["brewerId"] + "/" + data_updated[i][2]["beerId"]);
                 }
-
+                var additional_flavors = [];
+                for (var i=0; i<data_updated.length; i++) {
+                  additional_flavors.push(data_updated[i][4]);
+                
+                }
+                console.log(additional_flavors);
                 // Color scale
                 var color = d3.scale.category20();
                 var chartHeight = barHeight * zippedData.length + gapBetweenGroups * labels.length;
@@ -129,7 +134,7 @@
                     })
                     .on("click",function(d,i){
                         $('html,body').css('cursor','default');
-                        document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>Matched by: " + flavors[i].join(", ") + "</p><p class='innerpopout'>Link to beer: <a href=" + beer_advocate_url[i] + ">here</a></p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "%<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
+                        document.getElementById("popout").innerHTML = "<h3 class='innerpopout'>" + labels[i] + "</h3><p class='innerpopout'>Style: " + specifics[i]['style'] + "</p><p class='innerpopout'>Flavors: " + additional_flavors[i].join(", ") + "</p><p class='innerpopout'>Matched by: " + flavors[i].join(", ") + "</p><p class='innerpopout'>Link to beer: <a href=" + beer_advocate_url[i] + ">here</a></p><p class='innerpopout'>ABV: " + specifics[i]['ABV'] + "%<p class='innerpopout'>Appearance: " + drawStars(specifics[i]['appearance']) +  "</p><p class='innerpopout'>Aroma: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Palate: " + drawStars(specifics[i]['aroma']) + "</p><p class='innerpopout'>Taste: " + drawStars(specifics[i]['taste'])+ "</p><p class='innerpopout'>Overall: " + drawStars(specifics[i]['overall']) +"</p>"
                     });
 
                 // Create rectangles of the correct width

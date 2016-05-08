@@ -55,8 +55,10 @@ file9 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_data_all_
 beer_data_all = json.load(file9, object_hook=json_numpy_obj_hook) ## 11mb
 file10 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/beer_sentiment.json')
 beer_sentiment = json.load(file10, object_hook=json_numpy_obj_hook) ## 1.5mb
-fil11 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/brewery_to_beer.json')
-brewery_to_beer = json.load(fil11, object_hook=json_numpy_obj_hook) ## 0.08mb
+file11 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/brewery_to_beer.json')
+brewery_to_beer = json.load(file11, object_hook=json_numpy_obj_hook) ## 0.08mb
+file12 = urllib2.urlopen('https://s3.amazonaws.com/stantemptesting/top_flavors_2.json')
+beer_to_related_flavors = json.load(file12, encoding='utf8') ## 4mb
 
 
 def closest_beers(beers_set, beer_index_in, k = 5):
@@ -358,7 +360,7 @@ def find_similar(q, version="new",number=5):
         beer_id, score = elem
         beer_data = beer_data_all[beer_id]
         if beer_id in beers_flavors.keys():
-            final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id]])
+            final_final_result.append([beer_id, score, beer_data, beers_flavors[beer_id], beer_to_related_flavors[beer_id] ])
         else:
-            final_final_result.append([beer_id, score, beer_data, []])
+            final_final_result.append([beer_id, score, beer_data, [], beer_to_related_flavors[beer_id]])
     return final_final_result
