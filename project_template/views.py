@@ -13,16 +13,14 @@ from django.http import JsonResponse
 def index(request):
 	output = []
 	search = request.GET.get('search','')
-	version = request.GET.get('version','new')
 	request_type = (request.META["HTTP_ACCEPT"].split(",")[0])
 	if (request_type == "application/json"):
-		output = find_similar(search,version,10)
+		output = find_similar(search,10)
 		return JsonResponse(output, content_type="application/json", safe=False)
 		
 	elif (request_type == "text/html"):
 		return render_to_response('project_template/index.html', 
 							  {
-							   'search_params': search,
-							   'version':version
+							   'search_params': search
 							  })
 

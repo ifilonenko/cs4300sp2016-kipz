@@ -83,7 +83,7 @@ def closest_features(features_set, feature_index_in, k = 5):
         result.append((index_to_vocab[str(i)],sims[i]/sims[asort[0]]))
     return result
 
-def rocchio(q, relevant,irrelevant,version="new", a=.3, b=.3, c=.8, clip = True):
+def rocchio(q, relevant,irrelevant,a=.3, b=.3, c=.8, clip = True):
     '''
     Arguments:
         query: a string representing the name of the beer being queried for
@@ -107,9 +107,9 @@ def rocchio(q, relevant,irrelevant,version="new", a=.3, b=.3, c=.8, clip = True)
     irrelevant_vectors =[beers_compressed[beer_name_to_index[x],:] for x in irrelevant]  
     irrelevant_vector = sum(x for x in irrelevant_vectors)
     if q in beer_sentiment.keys():
-        if ((beer_sentiment[q] == 0.0) and (version=="new")):
+        if ((beer_sentiment[q] == 0.0)):
             a -= 0.1
-        elif ((beer_sentiment[q] == 1.0) and (version=="new")):
+        elif ((beer_sentiment[q] == 1.0)):
             a += 0.1
         else: 
             a += 0.0
@@ -129,7 +129,7 @@ def rocchio(q, relevant,irrelevant,version="new", a=.3, b=.3, c=.8, clip = True)
         final = (first_term + second_term - third_term)
     return final
 
-def roccio_with_pseudo(q,version="new", k = 10):
+def roccio_with_pseudo(q,k = 10):
     '''
     Arguments:
         q: Name of the beer you are searching for
@@ -142,7 +142,7 @@ def roccio_with_pseudo(q,version="new", k = 10):
     """
     '''
     pseudo_relevant = closest_beers(beers_compressed,beer_name_to_index[q],k)
-    query_vector = rocchio(q,pseudo_relevant,[],version)
+    query_vector = rocchio(q,pseudo_relevant,[])
     beers_compressed_2 = normalize(beers_compressed, axis = 1)
     sims = (np.dot(beers_compressed_2,query_vector))/(LA.norm(beers_compressed_2)* LA.norm(query_vector))
     asort = np.argsort(-sims)[:k+1]
@@ -318,7 +318,7 @@ def beers_from_flavors_and_similar(flavors, k, z):
 
     return (normalized_result, beers_flavors)
 
-def find_similar(q, version="new",number=5):
+def find_similar(q, number=5):
     queries = q.split("@@ ")
     query_list = defaultdict(list)
     result_list = defaultdict(list)
@@ -338,19 +338,16 @@ def find_similar(q, version="new",number=5):
     for key,value in query_list.iteritems():
         if key == "beer":
             for indx in value:
-                for elem in roccio_with_pseudo(indx,version, number):
+                for elem in roccio_with_pseudo(indx,number):
                     result_list[elem[0]].append(elem[1]*100)
         if key == "features":
-            if (version=="new"):
-                (score_data, beers_flavors) = beers_from_flavors_and_similar(value, number, 5)
-            else:
-                (score_data, beers_flavors) = beers_from_flavors(value, number)
+            (score_data, beers_flavors) = beers_from_flavors_and_similar(value, number, 5)
             for (beer_name, score) in score_data:
                 result_list[beer_name].append(score*50)
         if key == "brewery":
             for indx in value:
                 for inner_indx in brewery_to_beer[indx]:
-                    for elem in roccio_with_pseudo(inner_indx,version, number):
+                    for elem in roccio_with_pseudo(inner_indx,number):
                         result_list[elem[0]].append(elem[1]*100)
     for k,v in result_list.iteritems():
         final_result[k] = sum(v)
